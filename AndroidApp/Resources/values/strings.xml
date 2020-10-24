@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AndroidApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="dialog_register">登録</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <string name="quiz_checkanswer">答え合わせ</string>
+    <string name="quiz_next">次の問題</string>
+  <string name="devoption_import">インポート</string>
+</resources>
