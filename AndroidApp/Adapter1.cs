@@ -10,16 +10,16 @@ namespace AndroidApp.Assets
     {
         public event EventHandler<Adapter1ClickEventArgs> ItemClick;
         public event EventHandler<Adapter1ClickEventArgs> ItemLongClick;
-        public WordStruct[] Word;
+        public DoublelineListStruct[] Word;
 
-        public Adapter1(WordStruct[] words)
+        public Adapter1(DoublelineListStruct[] words)
         {
             Word = words;
         }
 
         public Adapter1(string[] title, string[] description)
         {
-            WordStruct[] words = new WordStruct[title.Length];
+            DoublelineListStruct[] words = new DoublelineListStruct[title.Length];
             for (int i = 0; i < words.Length; i++)
             {
                 words[i].Title = title[i];
@@ -55,7 +55,7 @@ namespace AndroidApp.Assets
 
         public void RemoveAt(int index)
         {
-            Word[index] = new WordStruct();
+            Word[index] = new DoublelineListStruct();
             for (int i = index; i < Word.Length; i++)
             {
                 if (Word.Length - 1 != i)

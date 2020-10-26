@@ -44,7 +44,6 @@ namespace AndroidApp.Assets
                 using (FileStream fs = File.Open(filePath, mode))
                 {
                     byte[] contentbyte = UTF8Encoding.UTF8.GetBytes(content);
-                    //await fs.WriteAsync(new byte[0], 0, content.Length);
                     await fs.WriteAsync(contentbyte, 0, content.Length);
                     Log.Debug(Application.Context.ApplicationContext.PackageName, $"Wrote {content} in {filePath}.");
                     fs.Close();
@@ -60,6 +59,6 @@ namespace AndroidApp.Assets
                     fs.Close();
                 }
             }
-        }      
+        }  
     }
 }

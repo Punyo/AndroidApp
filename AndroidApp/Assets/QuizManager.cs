@@ -16,15 +16,15 @@ namespace AndroidApp.Assets
     class QuizManager
     {
         private Activity currentactivity;
-        private WordStruct[] wordlist;
-        private WordStruct currentquestion;
+        private DoublelineListStruct[] wordlist;
+        private DoublelineListStruct currentquestion;
         private TextView questiontext;
         private Button button;
         private ImageView marubatsu;
         private Animation animation;
         private EditText textfield;
 
-        public QuizManager(Activity activity, WordStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image)
+        public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image)
         {
             currentactivity = activity;
             wordlist = words;

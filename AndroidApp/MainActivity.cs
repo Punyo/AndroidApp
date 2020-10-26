@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Android;
@@ -34,8 +35,8 @@ namespace AndroidApp
         private FloatingActionButton fab;
         private int CurrentLayoutID;
         private bool isloadwords = false;
-        public WordStruct[] CurrentWordlist;
-        public static List<GenreStruct> genres;
+        public DoublelineListStruct[] CurrentWordlist;
+        public List<GenreStruct> genres;
         private List<string> descs;
         private List<string> titles;
         public int Genreid { private set; get; }
@@ -107,14 +108,14 @@ namespace AndroidApp
                     }
                     else
                     {
-                        genre.Words = new WordStruct[0];
+                        genre.Words = new DoublelineListStruct[0];
                     }
                     genres.Add(genre);
                     titles.Sort();
                     descs.Sort();
                 }
             }
-            CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray());
+            CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
         }
 
         public override void OnBackPressed()
@@ -126,7 +127,7 @@ namespace AndroidApp
             }
             else if (isloadwords)
             {
-                CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray());
+                CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
                 GenreStruct g = new GenreStruct();
                 g.GenreName = genres[Genreid].GenreName;
                 g.Words = CurrentWordlist;
@@ -239,7 +240,7 @@ namespace AndroidApp
             return true;
         }
 
-        public void CreateDoublelineListWithSwipe(WordStruct[] words, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        public void CreateDoublelineListWithSwipe(DoublelineListStruct[] words, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {
             IntlList();
             adapter = new Adapter1(words);
@@ -288,14 +289,14 @@ namespace AndroidApp
         {
             if (!isloadwords)
             {
-                CreateDoublelineListWithSwipe(genres[e.Position].Words, (words) => { ApplyChangetoGenreList(words, e.Position); });
+                CreateDoublelineListWithSwipe(genres[e.Position].Words, (words) => { ApplyChangetoWordList(words, e.Position); });
                 CurrentWordlist = genres[e.Position].Words;
 
                 isloadwords = true;
             }
         }
 
-        public void ApplyChangetoGenreList(WordStruct[] words, int index)
+        public void ApplyChangetoWordList(DoublelineListStruct[] words, int index)
         {
             WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(genres[index].GenreName + GenreFragment.TAG, MainActivity.FILENAME)), ref words);
             GenreStruct g = new GenreStruct();
@@ -304,6 +305,20 @@ namespace AndroidApp
             genres[index] = g;
             CurrentWordlist = genres[index].Words;
         }
+
+        private void ApplyChangetoGenreList(List<DoublelineListStruct> changedgenres)
+        {
+            foreach (var itema in genres)
+            {
+                if (!changedgenres.Exists(word => word.Title == itema.GenreName))
+                {
+                    genres.Remove(itema);
+                    Directory.Delete(Path.Combine(FOLDERDIR, itema.GenreName + GenreFragment.TAG), true);
+                    break;
+                }
+            }
+        }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

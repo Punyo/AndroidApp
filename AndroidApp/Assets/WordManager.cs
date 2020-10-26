@@ -13,14 +13,14 @@ namespace AndroidApp.Assets
 {
     public class WordManager
     {
-        public static string SerializeWordStructArray(WordStruct[] word)
+        public static string SerializeWordStructArray(DoublelineListStruct[] word)
         {
             return JsonSerializer.Serialize(word);
         }
 
-        public static WordStruct[] DeserializeWordStructArray(string json)
+        public static DoublelineListStruct[] DeserializeWordStructArray(string json)
         {
-            return JsonSerializer.Deserialize<WordStruct[]>(json);
+            return JsonSerializer.Deserialize<DoublelineListStruct[]>(json);
         }
 
         public static string GetInternalSavePath(string filename)
@@ -34,7 +34,7 @@ namespace AndroidApp.Assets
             return Path.Combine(file.AbsolutePath, filename);
         }
 
-        public static WordStruct[] ReadWordList(string path)
+        public static DoublelineListStruct[] ReadWordList(string path)
         {
             string json = FileIO.ReadFile(path);
             if (json != null)
@@ -44,7 +44,7 @@ namespace AndroidApp.Assets
             return null;
         }
 
-        public static void WriteWordlist(string path, ref WordStruct[] words)
+        public static void WriteWordlist(string path, ref DoublelineListStruct[] words)
         {
             string a = SerializeWordStructArray(words);
             //FileIO.WriteFileAsync(path, a, FileMode.Open);
@@ -53,9 +53,11 @@ namespace AndroidApp.Assets
     }
 
     [System.Serializable]
-    public struct WordStruct
+    public struct DoublelineListStruct
     {
+        //上段に表示
         public string Title { get; set; }
+        //下段に表示
         public string Description { get; set; }
 
     }
@@ -63,6 +65,6 @@ namespace AndroidApp.Assets
     public struct GenreStruct
     {
         public string GenreName { get; set; }
-        public WordStruct[] Words { get; set; }
+        public DoublelineListStruct[] Words { get; set; }
     }
 }

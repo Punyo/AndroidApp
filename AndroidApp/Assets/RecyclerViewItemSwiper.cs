@@ -25,7 +25,7 @@ namespace AndroidApp.Assets
 
         private Canvas canvas;
 
-        public delegate void OnSwipedEvent(WordStruct[] words);
+        public delegate void OnSwipedEvent(DoublelineListStruct[] words);
         public event OnSwipedEvent OnSwipe;
         public RecyclerViewItemSwiper(int dragDirs, int swipeDirs,ref Adapter1 adapter) : base(dragDirs, swipeDirs)
         {

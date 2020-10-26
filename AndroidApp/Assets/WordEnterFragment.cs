@@ -58,13 +58,13 @@ namespace AndroidApp.Assets
         {
             title_field = view.FindViewById<EditText>(Resource.Id.title_textfield);
             desc_field = view.FindViewById<EditText>(Resource.Id.description_textfield);
-            WordStruct newword = new WordStruct();
+            DoublelineListStruct newword = new DoublelineListStruct();
             newword.Title = title_field.Text;
             newword.Description = desc_field.Text;
             Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
             activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
             WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.FILENAME)), ref activityinstance.CurrentWordlist);
-            activityinstance.CreateDoublelineListWithSwipe(activityinstance.CurrentWordlist, (words) => { activityinstance.ApplyChangetoGenreList(words, activityinstance.Genreid); });
+            activityinstance.CreateDoublelineListWithSwipe(activityinstance.CurrentWordlist, (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); });
         }
 
         public void Cancel(object s, DialogClickEventArgs args)
