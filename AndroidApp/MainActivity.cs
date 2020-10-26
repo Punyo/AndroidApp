@@ -19,6 +19,7 @@ using Android.Views.Animations;
 using Android.Widget;
 using AndroidApp.Assets;
 
+
 namespace AndroidApp
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
@@ -34,11 +35,11 @@ namespace AndroidApp
         private int CurrentLayoutID;
         private bool isloadwords = false;
         public WordStruct[] CurrentWordlist;
-        public List<GenreStruct> genres;
+        public static List<GenreStruct> genres;
         private List<string> descs;
         private List<string> titles;
-        private int genreid;
-        
+        public int Genreid { private set; get; }
+
 
         public const string FILENAME = "content.json";
         private readonly string FOLDERDIR = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
@@ -113,20 +114,8 @@ namespace AndroidApp
                     descs.Sort();
                 }
             }
-            CreateDoublelineList(titles.ToArray(), descs.ToArray());
+            CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray());
         }
-
-        public void CreateWordList(string genrename)
-        {
-            foreach (var item in genres)
-            {
-                if (item.GenreName == genrename)
-                {
-                    CreateDoublelineList(item.Words);
-                }
-            }
-        }
-
 
         public override void OnBackPressed()
         {
@@ -137,11 +126,11 @@ namespace AndroidApp
             }
             else if (isloadwords)
             {
-                CreateDoublelineList(titles.ToArray(), descs.ToArray());
+                CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray());
                 GenreStruct g = new GenreStruct();
-                g.GenreName = genres[genreid].GenreName;
+                g.GenreName = genres[Genreid].GenreName;
                 g.Words = CurrentWordlist;
-                genres[genreid] = g;
+                genres[Genreid] = g;
                 isloadwords = false;
             }
             else
@@ -179,7 +168,7 @@ namespace AndroidApp
             //transaction.Add(Resource.Id.content,f).AddToBackStack(null).Commit();            
             if (isloadwords)
             {
-                WordEnterFragment word = new WordEnterFragment(this, genres[genreid].GenreName);
+                WordEnterFragment word = new WordEnterFragment(this, genres[Genreid].GenreName);
                 word.Show(SupportFragmentManager.BeginTransaction(), "register");
             }
             else
@@ -221,7 +210,7 @@ namespace AndroidApp
             }
             else if (id == Resource.Id.nav_share)
             {
-                
+
             }
             else if (id == Resource.Id.nav_send)
             {
@@ -242,63 +231,79 @@ namespace AndroidApp
             if (isloadwords)
             {
                 GenreStruct g = new GenreStruct();
-                g.GenreName = genres[genreid].GenreName;
+                g.GenreName = genres[Genreid].GenreName;
                 g.Words = CurrentWordlist;
-                genres[genreid] = g;
+                genres[Genreid] = g;
                 isloadwords = false;
             }
             return true;
         }
 
-        public void CreateDoublelineList(WordStruct[] words)
+        public void CreateDoublelineListWithSwipe(WordStruct[] words, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {
-            maincontentlayout.RemoveAllViews();
-            LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
-            recyclerView = (RecyclerView)FindViewById<RecyclerView>(Resource.Id.list_view);
-            manager = new LinearLayoutManager(this);
-            recyclerView.SetLayoutManager(manager);
+            IntlList();
             adapter = new Adapter1(words);
-            var item = new ItemTouchHelper(new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, adapter));
-            item.AttachToRecyclerView(recyclerView);
-
+            SwipeSetUp(onswipe);
             adapter.ItemClick += RecyclerView_OnClick;
-
-            recyclerView.SetAdapter(adapter);
-            RecyclerView.ItemDecoration deco = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
-            recyclerView.AddItemDecoration(deco);
-
+            AddItenDecoration();
         }
 
-        public void CreateDoublelineList(string[] titles, string[] description)
+        public void CreateDoublelineListWithSwipe(string[] titles, string[] description, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        {
+            IntlList();
+            adapter = new Adapter1(titles, description);
+            SwipeSetUp(onswipe);
+            adapter.ItemClick += RecyclerView_OnClick;
+            AddItenDecoration();
+        }
+
+        private void SwipeSetUp(RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        {
+            RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
+            if (onswipe != null)
+            {
+                swiper.OnSwipe += onswipe;
+            }
+            var item = new ItemTouchHelper(swiper);
+            item.AttachToRecyclerView(recyclerView);
+        }
+
+        private void AddItenDecoration()
+        {
+            recyclerView.SetAdapter(adapter);
+            RecyclerView.ItemDecoration deco = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
+            recyclerView.AddItemDecoration(deco);
+        }
+
+        private void IntlList()
         {
             maincontentlayout.RemoveAllViews();
             LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
             recyclerView = (RecyclerView)FindViewById<RecyclerView>(Resource.Id.list_view);
             manager = new LinearLayoutManager(this);
             recyclerView.SetLayoutManager(manager);
-            adapter = new Adapter1(titles, description);
-            var item = new ItemTouchHelper(new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, adapter));
-            item.AttachToRecyclerView(recyclerView);
-
-            adapter.ItemClick += RecyclerView_OnClick;
-
-            recyclerView.SetAdapter(adapter);
-            RecyclerView.ItemDecoration deco = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
-            recyclerView.AddItemDecoration(deco);
         }
 
         private void RecyclerView_OnClick(object sender, Adapter1ClickEventArgs e)
         {
             if (!isloadwords)
             {
-                CreateDoublelineList(genres[e.Position].Words);
+                CreateDoublelineListWithSwipe(genres[e.Position].Words, (words) => { ApplyChangetoGenreList(words, e.Position); });
                 CurrentWordlist = genres[e.Position].Words;
-                genreid = e.Position;
 
                 isloadwords = true;
-            }          
+            }
         }
 
+        public void ApplyChangetoGenreList(WordStruct[] words, int index)
+        {
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(genres[index].GenreName + GenreFragment.TAG, MainActivity.FILENAME)), ref words);
+            GenreStruct g = new GenreStruct();
+            g.GenreName = genres[index].GenreName;
+            g.Words = words;
+            genres[index] = g;
+            CurrentWordlist = genres[index].Words;
+        }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

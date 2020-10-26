@@ -63,8 +63,8 @@ namespace AndroidApp.Assets
             newword.Description = desc_field.Text;
             Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
             activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
-            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.FILENAME)), activityinstance.CurrentWordlist);
-            activityinstance.CreateDoublelineList(activityinstance.CurrentWordlist);
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.FILENAME)), ref activityinstance.CurrentWordlist);
+            activityinstance.CreateDoublelineListWithSwipe(activityinstance.CurrentWordlist, (words) => { activityinstance.ApplyChangetoGenreList(words, activityinstance.Genreid); });
         }
 
         public void Cancel(object s, DialogClickEventArgs args)

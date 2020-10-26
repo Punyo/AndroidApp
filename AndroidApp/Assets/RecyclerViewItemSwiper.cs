@@ -18,16 +18,16 @@ namespace AndroidApp.Assets
 {
     public class RecyclerViewItemSwiper : ItemTouchHelper.SimpleCallback
     {
-        private Adapter1 viewadapter;
+        private  Adapter1 viewadapter;
 
 
         private ColorDrawable drawable;
 
         private Canvas canvas;
 
-        public delegate void OnSwipedEvent();
+        public delegate void OnSwipedEvent(WordStruct[] words);
         public event OnSwipedEvent OnSwipe;
-        public RecyclerViewItemSwiper(int dragDirs, int swipeDirs, Adapter1 adapter) : base(dragDirs, swipeDirs)
+        public RecyclerViewItemSwiper(int dragDirs, int swipeDirs,ref Adapter1 adapter) : base(dragDirs, swipeDirs)
         {
             viewadapter = adapter;
             drawable = new ColorDrawable();
@@ -55,7 +55,12 @@ namespace AndroidApp.Assets
         {
             //canvas.DrawRect(viewHolder.ItemView.Left, viewHolder.ItemView.Top,viewHolder.ItemView.Right, viewHolder.ItemView.Bottom,);
             viewadapter.RemoveAt(viewHolder.AdapterPosition);
-            //OnSwipe?.Invoke();
+            //words = viewadapter.Word          
+            OnSwipe?.Invoke(viewadapter.Word);
+            //if (path != null)
+            //{
+            //    FileIO.WriteFileAsync(path, WordManager.SerializeWordStructArray(viewadapter.Word), System.IO.FileMode.Open);
+            //}
         }
     }
 }

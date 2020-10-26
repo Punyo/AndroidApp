@@ -37,16 +37,18 @@ namespace AndroidApp.Assets
         public static WordStruct[] ReadWordList(string path)
         {
             string json = FileIO.ReadFile(path);
-            if (json!=null)
+            if (json != null)
             {
                 return DeserializeWordStructArray(json);
             }
             return null;
         }
 
-        public static void WriteWordlist(string path, WordStruct[] words)
+        public static void WriteWordlist(string path, ref WordStruct[] words)
         {
-            FileIO.WriteFileAsync(path, SerializeWordStructArray(words), FileMode.Open);
+            string a = SerializeWordStructArray(words);
+            //FileIO.WriteFileAsync(path, a, FileMode.Open);
+            File.WriteAllText(path, a);
         }
     }
 
@@ -55,7 +57,7 @@ namespace AndroidApp.Assets
     {
         public string Title { get; set; }
         public string Description { get; set; }
-    
+
     }
 
     public struct GenreStruct
