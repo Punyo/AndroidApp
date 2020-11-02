@@ -196,10 +196,10 @@ namespace AndroidApp
             {
                 View v = LayoutInflater.Inflate(Resource.Layout.quiz, maincontentlayout);
                 //ReadWord();
-                new QuizManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
+                RunOnUiThread(() => new QuizManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
                     v.FindViewById<TextView>(Resource.Id.quiz_question),
                     v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
-                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu));
+                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu)));
             }
             else if (id == Resource.Id.nav_slideshow)
             {
