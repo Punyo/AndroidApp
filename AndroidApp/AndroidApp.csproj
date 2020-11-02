@@ -67,12 +67,12 @@
     <Compile Include="Adapter1.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Assets\ArraySorter.cs" />
     <Compile Include="Assets\DevOption.cs" />
     <Compile Include="Assets\FileIO.cs" />
     <Compile Include="Assets\GenreFragment .cs" />
     <Compile Include="Assets\JsonFragment.cs" />
     <Compile Include="Assets\QuizManager.cs" />
+    <Compile Include="Assets\RecyclerViewComponents.cs" />
     <Compile Include="Assets\RecyclerViewItemSwiper.cs" />
     <Compile Include="Assets\WordEnterFragment.cs" />
     <Compile Include="Assets\WordManager.cs" />

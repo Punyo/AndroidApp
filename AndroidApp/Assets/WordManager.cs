@@ -44,7 +44,7 @@ namespace AndroidApp.Assets
             return null;
         }
 
-        public static void WriteWordlist(string path, ref DoublelineListStruct[] words)
+        public static void WriteWordlist(string path, DoublelineListStruct[] words)
         {
             string a = SerializeWordStructArray(words);
             //FileIO.WriteFileAsync(path, a, FileMode.Open);

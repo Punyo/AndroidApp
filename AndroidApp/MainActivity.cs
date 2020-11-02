@@ -28,7 +28,7 @@ namespace AndroidApp
     {
         private Android.Support.V7.Widget.Toolbar toolbar;
         private DrawerLayout drawer;
-        private LinearLayout maincontentlayout;
+        public LinearLayout maincontentlayout { private set; get; }
         private RecyclerView recyclerView;
         private RecyclerView.LayoutManager manager;
         private Adapter1 adapter;
@@ -115,7 +115,8 @@ namespace AndroidApp
                     descs.Sort();
                 }
             }
-            CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
+            //CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
+            RecyclerViewComponents.CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
         }
 
         public override void OnBackPressed()
@@ -127,7 +128,8 @@ namespace AndroidApp
             }
             else if (isloadwords)
             {
-                CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
+                //CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
+                RecyclerViewComponents.CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
                 GenreStruct g = new GenreStruct();
                 g.GenreName = genres[Genreid].GenreName;
                 g.Words = CurrentWordlist;
@@ -239,66 +241,21 @@ namespace AndroidApp
             }
             return true;
         }
-
-        public void CreateDoublelineListWithSwipe(DoublelineListStruct[] words, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
-        {
-            IntlList();
-            adapter = new Adapter1(words);
-            SwipeSetUp(onswipe);
-            adapter.ItemClick += RecyclerView_OnClick;
-            AddItenDecoration();
-        }
-
-        public void CreateDoublelineListWithSwipe(string[] titles, string[] description, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
-        {
-            IntlList();
-            adapter = new Adapter1(titles, description);
-            SwipeSetUp(onswipe);
-            adapter.ItemClick += RecyclerView_OnClick;
-            AddItenDecoration();
-        }
-
-        private void SwipeSetUp(RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
-        {
-            RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
-            if (onswipe != null)
-            {
-                swiper.OnSwipe += onswipe;
-            }
-            var item = new ItemTouchHelper(swiper);
-            item.AttachToRecyclerView(recyclerView);
-        }
-
-        private void AddItenDecoration()
-        {
-            recyclerView.SetAdapter(adapter);
-            RecyclerView.ItemDecoration deco = new DividerItemDecoration(this, DividerItemDecoration.Vertical);
-            recyclerView.AddItemDecoration(deco);
-        }
-
-        private void IntlList()
-        {
-            maincontentlayout.RemoveAllViews();
-            LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
-            recyclerView = (RecyclerView)FindViewById<RecyclerView>(Resource.Id.list_view);
-            manager = new LinearLayoutManager(this);
-            recyclerView.SetLayoutManager(manager);
-        }
-
-        private void RecyclerView_OnClick(object sender, Adapter1ClickEventArgs e)
+        public void RecyclerView_OnClick(object sender, Adapter1ClickEventArgs e)
         {
             if (!isloadwords)
             {
-                CreateDoublelineListWithSwipe(genres[e.Position].Words, (words) => { ApplyChangetoWordList(words, e.Position); });
+                //CreateDoublelineListWithSwipe(genres[e.Position].Words, (words) => { ApplyChangetoWordList(words, e.Position); });
+                RecyclerViewComponents.CreateDoublelineListWithSwipe(genres[e.Position].Words, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e.Position); }, RecyclerView_OnClick);
                 CurrentWordlist = genres[e.Position].Words;
-
+                Genreid = e.Position;
                 isloadwords = true;
             }
         }
 
         public void ApplyChangetoWordList(DoublelineListStruct[] words, int index)
         {
-            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(genres[index].GenreName + GenreFragment.TAG, MainActivity.FILENAME)), ref words);
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(genres[index].GenreName + GenreFragment.TAG, MainActivity.FILENAME)),  words);
             GenreStruct g = new GenreStruct();
             g.GenreName = genres[index].GenreName;
             g.Words = words;
