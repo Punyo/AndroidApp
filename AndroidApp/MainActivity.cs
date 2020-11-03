@@ -152,14 +152,6 @@ namespace AndroidApp
 
         private void FabOnClick(object sender, EventArgs eventArgs)
         {
-            //View view = (View)sender;
-            //Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-            //    .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
-            //WordEnterFragment f = new WordEnterFragment(this);
-            //f.Show(SupportFragmentManager.BeginTransaction(), "register");
-            //Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
-            //transaction.SetTransition(Android.Support.V4.App.FragmentTransaction.TransitFragmentOpen);
-            //transaction.Add(Resource.Id.content,f).AddToBackStack(null).Commit();            
             if (isloadedwords)
             {
                 WordEnterFragment word = new WordEnterFragment(this, genres[Genreid].GenreName);
@@ -189,10 +181,15 @@ namespace AndroidApp
                 RunOnUiThread(() => new QuizManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
                     v.FindViewById<TextView>(Resource.Id.quiz_question),
                     v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
-                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu)));
+                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu), true));
             }
-            else if (id == Resource.Id.nav_slideshow)
+            else if (id == Resource.Id.nav_test)
             {
+                View v = LayoutInflater.Inflate(Resource.Layout.quiz, maincontentlayout);
+                RunOnUiThread(() => new TestManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
+                    v.FindViewById<TextView>(Resource.Id.quiz_question),
+                    v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
+                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),false));
             }
             else if (id == Resource.Id.nav_devoption)
             {

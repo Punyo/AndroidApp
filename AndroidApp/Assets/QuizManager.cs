@@ -15,27 +15,31 @@ namespace AndroidApp.Assets
 {
     class QuizManager
     {
-        private Activity currentactivity;
+        public readonly Activity currentactivity;
         private DoublelineListStruct[] wordlist;
         private DoublelineListStruct currentquestion;
-        private TextView questiontext;
-        private Button button;
+        public readonly TextView questiontext;
+        public readonly Button button;
         private ImageView marubatsu;
         private Animation animation;
         private EditText textfield;
+        public int CorrectCount { private set; get; }
 
-        public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image)
+        public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, bool faststart)
         {
             currentactivity = activity;
             wordlist = words;
             questiontext = question;
             textfield = edit;
             button = answerbutton;
-            answerbutton.Click += CheckAnswer;
             animation = AnimationUtils.LoadAnimation(activity, Resource.Animation.marubatsuanim);
             animation.AnimationEnd += AnimationEnd;
             marubatsu = image;
-            GiveQuestion();
+            if (faststart)
+            {
+                GiveQuestion();
+                answerbutton.Click += CheckAnswer;
+            }
         }
 
         private async void AnimationEnd(object sender, Animation.AnimationEndEventArgs e)
@@ -48,7 +52,7 @@ namespace AndroidApp.Assets
             textfield.Clickable = true;
         }
 
-        private void GiveQuestion()
+        public virtual void GiveQuestion()
         {
             Random r = new Random();
             currentquestion = wordlist[r.Next(0, wordlist.Length)];
@@ -56,11 +60,19 @@ namespace AndroidApp.Assets
             button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
         }
 
-        private void CheckAnswer(object sender, EventArgs e)
+        public virtual void GiveQuestion(int questionindex)
+        {          
+            currentquestion = wordlist[questionindex];
+            questiontext.Text = currentquestion.Title;
+            button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
+        }
+
+        public virtual void CheckAnswer(object sender, EventArgs e)
         {
             if (textfield.Text.Replace(" ", "") == currentquestion.Description)
             {
                 marubatsu.SetImageResource(Resource.Drawable.maru);
+                CorrectCount++;
             }
             else
             {
@@ -74,12 +86,18 @@ namespace AndroidApp.Assets
             button.Click += NextQuestion;
         }
 
-        private void NextQuestion(object sender, EventArgs e)
+        public void NextQuestion(object sender, EventArgs e)
         {
             questiontext.SetTextColor(Android.Graphics.Color.Black);
             GiveQuestion();
             button.Click += CheckAnswer;
             button.Click -= NextQuestion;
+            textfield.Text = string.Empty;
+        }
+
+        public DoublelineListStruct[] GetWordList()
+        {
+            return wordlist;
         }
     }
 }

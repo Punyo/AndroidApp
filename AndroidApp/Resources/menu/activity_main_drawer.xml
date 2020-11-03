@@ -6,16 +6,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_wordlist"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:icon="@drawable/baseline_list_white_48"
+            android:title="単語帳" />
         <item
             android:id="@+id/nav_quiz"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="一問一答" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_test"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Slideshow" />
+            android:title="テスト" />
         <item
             android:id="@+id/nav_devoption"
             android:icon="@drawable/baseline_developer_mode_black_48"
