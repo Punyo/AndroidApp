@@ -45,7 +45,7 @@ namespace AndroidApp.Assets
 
         public void Import(object s, DialogClickEventArgs args)
         {
-            FileIO.WriteFileAsync(WordManager.GetInternalSavePath(MainActivity.FILENAME), view.FindViewById<EditText>(Resource.Id.jsonenter_textview).Text, System.IO.FileMode.Open);
+            FileIO.WriteFileAsync(WordManager.GetInternalSavePath(MainActivity.SAVEDATANAME), view.FindViewById<EditText>(Resource.Id.jsonenter_textview).Text, System.IO.FileMode.Open);
         }
 
         public void Cancel(object s, DialogClickEventArgs args)

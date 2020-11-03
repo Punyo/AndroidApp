@@ -45,31 +45,25 @@ namespace AndroidApp.Assets
             return builder.Create();
         }
 
-        //public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        //{
-        //    base.OnCreate(savedInstanceState);
-        //   view = inflater.Inflate(Resource.Layout.dialog_wordenter, null);
-        //    //title_field.TextChanged += Title_field_TextChanged;
-        //    //desc_field.TextChanged += Desc_field_TextChanged;
-        //    return view;
-        //}
-
         public void Register(object s, DialogClickEventArgs args)
         {
             title_field = view.FindViewById<EditText>(Resource.Id.title_textfield);
             desc_field = view.FindViewById<EditText>(Resource.Id.description_textfield);
+
             DoublelineListStruct newword = new DoublelineListStruct();
             newword.Title = title_field.Text;
             newword.Description = desc_field.Text;
+
             Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
             activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
-            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.FILENAME)), activityinstance.CurrentWordlist);
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), activityinstance.CurrentWordlist);
+
             GenreStruct g = new GenreStruct();
             g.GenreName = activityinstance.genres[activityinstance.Genreid].GenreName;
             g.Words = activityinstance.CurrentWordlist;
             activityinstance.genres[activityinstance.Genreid] = g;
-            //activityinstance.CreateDoublelineListWithSwipe(activityinstance.CurrentWordlist, (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); });
-            RecyclerViewComponents.CreateDoublelineListWithSwipe(activityinstance.CurrentWordlist, activityinstance, activityinstance.maincontentlayout,
+
+            RecyclerViewComponents.CreateDoublelineList(activityinstance.CurrentWordlist, activityinstance, activityinstance.maincontentlayout,
                 (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); }, activityinstance.RecyclerView_OnClick);
         }
 

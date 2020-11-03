@@ -16,7 +16,7 @@ namespace AndroidApp.Assets
 {
     class RecyclerViewComponents
     {
-        public static void CreateDoublelineListWithSwipe(DoublelineListStruct[] words, Activity activity,  LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
+        public static void CreateDoublelineList(DoublelineListStruct[] words, Activity activity, LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
             Adapter1 adapter = new Adapter1(words);
             IntlList(ref activity, ref view, ref adapter, onswipe);
@@ -26,7 +26,7 @@ namespace AndroidApp.Assets
             }
         }
 
-        public static void CreateDoublelineListWithSwipe(string[] titles, string[] description, Activity activity,  LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
+        public static void CreateDoublelineList(string[] titles, string[] description, Activity activity, LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
             Adapter1 adapter = new Adapter1(titles, description);
             IntlList(ref activity, ref view, ref adapter, onswipe);
@@ -46,13 +46,13 @@ namespace AndroidApp.Assets
             recyclerView.SetAdapter(adapter);
             RecyclerView.ItemDecoration deco = new DividerItemDecoration(activity, DividerItemDecoration.Vertical);
             recyclerView.AddItemDecoration(deco);
-            RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
             if (onswipe != null)
             {
+                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
                 swiper.OnSwipe += onswipe;
+                var item = new ItemTouchHelper(swiper);
+                item.AttachToRecyclerView(recyclerView);
             }
-            var item = new ItemTouchHelper(swiper);
-            item.AttachToRecyclerView(recyclerView);
         }
 
     }
