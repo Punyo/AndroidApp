@@ -59,12 +59,40 @@ namespace AndroidApp.Assets
         public string Title { get; set; }
         //下段に表示
         public string Description { get; set; }
-
+        public static bool operator ==(DoublelineListStruct a, DoublelineListStruct b)
+        {
+            if (a.Title == b.Description && a.Description == b.Description)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool operator !=(DoublelineListStruct a, DoublelineListStruct b)
+        {
+            if (a.Title != b.Description || a.Description != b.Description)
+            {
+                return true;
+            }
+            return false;
+        }
+        public override bool Equals(Object objA)
+        {
+            return base.Equals(objA);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
-    public struct GenreStruct
+    public struct GenreStruct :  IComparable<GenreStruct>
     {
         public string GenreName { get; set; }
         public DoublelineListStruct[] Words { get; set; }
+
+        public int CompareTo(GenreStruct other)
+        {
+            return GenreName.CompareTo(other.GenreName);
+        }
     }
 }

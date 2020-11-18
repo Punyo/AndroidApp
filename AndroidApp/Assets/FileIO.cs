@@ -37,7 +37,26 @@ namespace AndroidApp.Assets
             }
         }
 
-        public static async void WriteFileAsync(string filePath, string content, FileMode mode)
+        public static async Task<string[]> ReadFileLineAsync(string filePath)
+        {
+            string[] returnarray = new string[0];
+            if (File.Exists(filePath))
+            {
+                using (StreamReader fs = File.OpenText(filePath))
+                {
+                    returnarray = await File.ReadAllLinesAsync(filePath);
+                    fs.Dispose();
+                    return returnarray;
+                }
+            }
+            else
+            {
+                Log.Error(Application.Context.ApplicationContext.PackageName, $"File Not Found. Path:{filePath}");
+                return returnarray;
+            }
+        }
+
+        public static async Task WriteFileAsync(string filePath, string content, FileMode mode)
         {
             if (File.Exists(filePath))
             {
@@ -59,6 +78,6 @@ namespace AndroidApp.Assets
                     fs.Close();
                 }
             }
-        }  
+        }
     }
 }

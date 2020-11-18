@@ -55,6 +55,7 @@ namespace AndroidApp.Assets
             string path = WordManager.GetInternalSavePath(view.FindViewById<EditText>(Resource.Id.genre_textfield).Text + TAG);
             Directory.CreateDirectory(path);
             File.WriteAllText(Path.Combine(path, MainActivity.SAVEDATANAME), string.Empty);
+            File.WriteAllText(Path.Combine(path, MainActivity.SCOREDATANAME), string.Empty);
             main.CreateGenreList();
         }
 

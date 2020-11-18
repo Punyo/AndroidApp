@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="GENRENAME"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scoreanalytics_title"
+        android:textStyle="bold"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:autoSizeTextType="uniform" />
+    <Microcharts.Droid.ChartView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/scoreanalytics_chartView" />
+    <TextView
+        android:text="問題ごとの正解率"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:id="@+id/textView1" />
+    <android.support.v7.widget.RecyclerView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+        android:id="@+id/scoreanalytics_recyclerView" />
+
+</LinearLayout>

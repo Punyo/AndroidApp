@@ -17,12 +17,16 @@ namespace AndroidApp.Assets
     {
         public readonly Activity currentactivity;
         private DoublelineListStruct[] wordlist;
-        private DoublelineListStruct currentquestion;
+        private int currentquestionindex;
         public readonly TextView questiontext;
         public readonly Button button;
         private ImageView marubatsu;
         private Animation animation;
         private EditText textfield;
+
+        public delegate void QuestionInfo(int index, QuestionResult result);
+        public event QuestionInfo OnCorrect;
+        public event QuestionInfo OnMiss;
         public int CorrectCount { private set; get; }
 
         public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, bool faststart)
@@ -55,30 +59,32 @@ namespace AndroidApp.Assets
         public virtual void GiveQuestion()
         {
             Random r = new Random();
-            currentquestion = wordlist[r.Next(0, wordlist.Length)];
-            questiontext.Text = currentquestion.Title;
+            currentquestionindex = r.Next(0, wordlist.Length);
+            questiontext.Text = wordlist[currentquestionindex].Title;
             button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
         }
 
         public virtual void GiveQuestion(int questionindex)
-        {          
-            currentquestion = wordlist[questionindex];
-            questiontext.Text = currentquestion.Title;
+        {
+            currentquestionindex = questionindex;
+            questiontext.Text = wordlist[currentquestionindex].Title;
             button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
         }
 
         public virtual void CheckAnswer(object sender, EventArgs e)
         {
-            if (textfield.Text.Replace(" ", "") == currentquestion.Description)
+            if (textfield.Text.Replace(" ", "") == wordlist[currentquestionindex].Description)
             {
                 marubatsu.SetImageResource(Resource.Drawable.maru);
                 CorrectCount++;
+                OnCorrect?.Invoke(currentquestionindex, QuestionResult.Correct);
             }
             else
             {
                 marubatsu.SetImageResource(Resource.Drawable.batsu);
-                questiontext.Text = currentquestion.Description;
+                questiontext.Text = wordlist[currentquestionindex].Description;
                 questiontext.SetTextColor(Android.Graphics.Color.Red);
+                OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
             }
             marubatsu.StartAnimation(animation);
             button.Text = currentactivity.GetString(Resource.String.quiz_next);
@@ -99,5 +105,16 @@ namespace AndroidApp.Assets
         {
             return wordlist;
         }
+
+        public void ResetCorrectCount()
+        {
+            CorrectCount = 0;
+        }
+    }
+    [Serializable]
+    public enum QuestionResult
+    {
+        Correct,
+        Miss
     }
 }

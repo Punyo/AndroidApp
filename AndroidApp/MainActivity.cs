@@ -19,7 +19,7 @@ using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
 using AndroidApp.Assets;
-
+using Microcharts.Droid;
 
 namespace AndroidApp
 {
@@ -34,6 +34,7 @@ namespace AndroidApp
         private bool isloadedwords = false;
         public DoublelineListStruct[] CurrentWordlist;
         public List<GenreStruct> genres;
+        private TestResultStruct[][] results;
 
         private List<string> Genredescriptions;
         private List<string> Genretitles;
@@ -41,6 +42,7 @@ namespace AndroidApp
 
 
         public const string SAVEDATANAME = "content.json";
+        public const string SCOREDATANAME = "score.json";
         private readonly string GENREFOLDERDIR = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -70,7 +72,7 @@ namespace AndroidApp
             OnNavigationItemSelected(navigationView.Menu.GetItem(0));
             toolbar.InflateMenu(Resource.Menu.menu_main);
             CurrentLayoutID = Resource.Id.nav_wordlist;
-
+            LoadScoreList();
         }
 
         public void CreateGenreList()
@@ -95,9 +97,9 @@ namespace AndroidApp
                 {
                     string name = item.Remove(0, item.LastIndexOf("/") + 1).Replace(GenreFragment.TAG, string.Empty);
                     GenreStruct genre = new GenreStruct();
-                    DateTime a = Directory.GetCreationTime(Path.Combine(GENREFOLDERDIR, item));
+                    DateTime creationtime = Directory.GetCreationTime(Path.Combine(GENREFOLDERDIR, item));
                     Genretitles.Add(name);
-                    Genredescriptions.Add($"作成日時：{a.Year}/{a.Month}/{a.Day}");
+                    Genredescriptions.Add($"作成日時：{creationtime.Year}/{creationtime.Month}/{creationtime.Day}");
                     string json = FileIO.ReadFile(Path.Combine(item, SAVEDATANAME));
                     genre.GenreName = name;
                     if (!string.IsNullOrEmpty(json))
@@ -109,11 +111,47 @@ namespace AndroidApp
                         genre.Words = new DoublelineListStruct[0];
                     }
                     genres.Add(genre);
-                    Genretitles.Sort();
-                    Genredescriptions.Sort();
                 }
             }
+            Genretitles.Sort();
+            Genredescriptions.Sort();
+            genres.Sort();
             RecyclerViewComponents.CreateDoublelineList(Genretitles.ToArray(), Genredescriptions.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
+        }
+
+        private async Task LoadScoreList()
+        {
+            results = new TestResultStruct[0][];
+            foreach (var item in Directory.GetDirectories(GENREFOLDERDIR))
+            {
+                if (item.Contains(GenreFragment.TAG))
+                {
+                    string json = FileIO.ReadFile(Path.Combine(item, SCOREDATANAME));
+                }
+            }
+            string[] dirs = Directory.GetDirectories(GENREFOLDERDIR);
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (dirs[i].Contains(GenreFragment.TAG))
+                {
+                    Array.Resize(ref results, results.Length + 1);
+                    string[] jsons = new string[0];
+                    try
+                    {
+                        jsons = File.ReadAllLines(Path.Combine(dirs[i], SCOREDATANAME));
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        await FileIO.WriteFileAsync(Path.Combine(dirs[i], SCOREDATANAME), string.Empty, FileMode.Open);
+                    }
+                    TestResultStruct[] res = new TestResultStruct[jsons.Length];
+                    for (int ia = 0; ia < jsons.Length; ia++)
+                    {
+                        res[ia] = JsonSerializer.Deserialize<TestResultStruct>(jsons[ia]);
+                    }
+                    results[results.Length - 1] = res;
+                }
+            }
         }
 
         public override void OnBackPressed()
@@ -189,7 +227,8 @@ namespace AndroidApp
                 RunOnUiThread(() => new TestManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
                     v.FindViewById<TextView>(Resource.Id.quiz_question),
                     v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
-                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),false));
+                    v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),
+                    WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName));
             }
             else if (id == Resource.Id.nav_devoption)
             {
@@ -198,7 +237,10 @@ namespace AndroidApp
             }
             else if (id == Resource.Id.nav_share)
             {
-
+                View v = LayoutInflater.Inflate(Resource.Layout.scoreanalytics, maincontentlayout);
+                RunOnUiThread(() => new ScoreAnalyticsManager(this, Resource.Id.scoreanalytics_recyclerView, v.FindViewById<TextView>(Resource.Id.scoreanalytics_title)
+                    , v.FindViewById<ChartView>(Resource.Id.scoreanalytics_chartView)
+                    , results[Genreid]));
             }
             else if (id == Resource.Id.nav_send)
             {
@@ -250,12 +292,25 @@ namespace AndroidApp
 
         private void ApplyChangetoGenreList(List<DoublelineListStruct> changedgenres)
         {
-            foreach (var itema in genres)
+            //foreach (var itema in genres)
+            //{
+            //    if (!changedgenres.Exists(word => word.Title == itema.GenreName))
+            //    {
+            //        genres.Remove(itema);
+            //        Genretitles.Remove(itema.GenreName);
+            //        Genredescriptions.RemoveAt(i);
+            //        Directory.Delete(Path.Combine(GENREFOLDERDIR, itema.GenreName + GenreFragment.TAG), true);
+            //        break;
+            //    }
+            //}
+            for (int i = 0; i < genres.Count; i++)
             {
-                if (!changedgenres.Exists(word => word.Title == itema.GenreName))
+                if (!changedgenres.Exists(word => word.Title == genres[i].GenreName))
                 {
-                    genres.Remove(itema);
-                    Directory.Delete(Path.Combine(GENREFOLDERDIR, itema.GenreName + GenreFragment.TAG), true);
+                    Genredescriptions.RemoveAt(i);
+                    Genretitles.Remove(genres[i].GenreName);
+                    genres.Remove(genres[i]);
+                    Directory.Delete(Path.Combine(GENREFOLDERDIR, genres[i].GenreName + GenreFragment.TAG), true);
                     break;
                 }
             }
@@ -266,6 +321,10 @@ namespace AndroidApp
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        public void SetTestResults(TestResultStruct[] result, int genreid)
+        {
+            results[genreid] = result;
         }
     }
 }
