@@ -58,9 +58,7 @@ namespace AndroidApp.Assets
             activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
             WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), activityinstance.CurrentWordlist);
 
-            GenreStruct g = new GenreStruct();
-            g.GenreName = activityinstance.genres[activityinstance.Genreid].GenreName;
-            g.Words = activityinstance.CurrentWordlist;
+            GenreStruct g = new GenreStruct(activityinstance.genres[activityinstance.Genreid].GenreName, activityinstance.CurrentWordlist);
             activityinstance.genres[activityinstance.Genreid] = g;
 
             RecyclerViewComponents.CreateDoublelineList(activityinstance.CurrentWordlist, activityinstance, activityinstance.maincontentlayout,

@@ -7,5 +7,11 @@
     <string name="dialog_cancel">キャンセル</string>
     <string name="quiz_checkanswer">答え合わせ</string>
     <string name="quiz_next">次の問題</string>
+    <string name="dialog_notselect_title">項目未選択</string>
+    <string name="dialog_notselect_desc">項目を選択してください</string> 
+  <string name="dialog_notestdata_title">テストデータなし</string>
+    <string name="dialog_notestdata_desc">「統計」を利用するには、項目を選択してテストを行ってください</string>
+  <string name="dialog_nowords_title">登録単語なし</string>
+    <string name="dialog_nowords_desc">この機能を利用するためには、選択中の項目に単語を追加してください</string>
   <string name="devoption_import">インポート</string>
 </resources>

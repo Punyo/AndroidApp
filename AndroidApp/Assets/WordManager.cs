@@ -3,7 +3,9 @@ using System.Text.Json;
 using System;
 
 using Android.Content;
-//using Android.OS;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 public enum WordLoadMode
 {
     External,
@@ -85,11 +87,27 @@ namespace AndroidApp.Assets
         }
     }
 
-    public struct GenreStruct :  IComparable<GenreStruct>
+    public class GenreStruct : IComparable<GenreStruct>
     {
-        public string GenreName { get; set; }
-        public DoublelineListStruct[] Words { get; set; }
+        public string GenreName { get; }
+        public List<DoublelineListStruct> Words { get; set; }
+        public ReadOnlyCollection<TestResultStruct> Results { get { return res.AsReadOnly(); } }
+        private List<TestResultStruct> res;
 
+        public GenreStruct(string name, IEnumerable<DoublelineListStruct> words, IEnumerable<TestResultStruct> results = null)
+        {
+            GenreName = name;
+            Words = words.ToList();
+            if (results!=null)
+            {
+                res = results.ToList();
+            }
+        }
+
+        public void SetTestResult(List<TestResultStruct> result)
+        {
+            res = (List<TestResultStruct>)result;
+        }
         public int CompareTo(GenreStruct other)
         {
             return GenreName.CompareTo(other.GenreName);

@@ -23,9 +23,16 @@ namespace AndroidApp.Assets
             title = titletext;
             a = activity;
             id = recyclerviewid;
-            ChangeResults(results);
+            if (results == null)
+            {
+                title.Text = "仮";
+            }
+            else
+            {
+                ShowResults(results);
+            }
         }
-        private void ChangeResults(TestResultStruct[] testresults)
+        private void ShowResults(TestResultStruct[] testresults)
         {
             linechart.MaxValue = 100;
             entries = Array.Empty<ChartEntry>();
@@ -60,7 +67,7 @@ namespace AndroidApp.Assets
                 for (int i = 0; i < Questionsvarious.Length; i++)
                 {
                     Array.Resize(ref Questionsforaccurately, Questionsforaccurately.Length + 1);
-                    Questionsforaccurately[Questionsforaccurately.Length - 1] = Array.FindAll(questionStructs, x => x.Question == Questionsvarious[i]);
+                    Questionsforaccurately[Questionsforaccurately.Length - 1] = Array.FindAll(questionStructs, x => x.Question.Title == Questionsvarious[i].Title && x.Question.Description == Questionsvarious[i].Description);
                 }
             }
             else
