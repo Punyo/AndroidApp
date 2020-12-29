@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
@@ -30,21 +31,23 @@ namespace AndroidApp
         private DrawerLayout drawer;
         public LinearLayout maincontentlayout { private set; get; }
         private FloatingActionButton fab;
-        private bool isloadedwords = false;
         public DoublelineListStruct[] CurrentWordlist;
         public List<GenreStruct> genres;
 
         private List<string> Genredescriptions;
         private List<string> Genretitles;
+
+        private RemovalAdapter1 currentadapter;
         public int Genreid { private set; get; }
 
 
         public const string SAVEDATANAME = "content.json";
         public const string SCOREDATANAME = "score.json";
-        private readonly string GENREFOLDERDIR = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+        public static readonly string GENREFOLDERDIR = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            Genreid = -1;
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
             toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
@@ -72,9 +75,6 @@ namespace AndroidApp
 
         public async void CreateGenreList()
         {
-            //List<string> titles = new List<string>();
-            //List<string> descs = new List<string>();
-
             if (Genretitles == null && Genredescriptions == null)
             {
                 Genretitles = new List<string>();
@@ -158,14 +158,12 @@ namespace AndroidApp
             {
                 drawer.CloseDrawer(GravityCompat.Start);
             }
-            else if (isloadedwords)
+            else if (Genreid != -1)
             {
-                //CreateDoublelineListWithSwipe(titles.ToArray(), descs.ToArray(), (a) => { ApplyChangetoGenreList(a.ToList()); });
                 RecyclerViewComponents.CreateDoublelineList(Genretitles.ToArray(), Genredescriptions.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
-                //genres[Genreid] = new GenreStruct(genres[Genreid].GenreName, CurrentWordlist);
-                isloadedwords = false;
                 Genreid = -1;
                 CurrentWordlist = null;
+                RemovalAdapterCheck();
             }
             else
             {
@@ -173,11 +171,31 @@ namespace AndroidApp
             }
         }
 
+        private void RemovalAdapterCheck()
+        {
+            if (currentadapter != null)
+            {
+                if (currentadapter.SelectedElements.Count > 0)
+                {
+                    toolbar.Menu.Clear();
+                    currentadapter = null;                  
+                }
+            }
+        }
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             int id = item.ItemId;
-            if (id == Resource.Id.action_settings)
+            if (id == Resource.Id.deleteword)
             {
+                if (currentadapter != null)
+                {
+                    currentadapter.ExcuteRemove();
+                }
+                else
+                {
+                    Log.Error("ERROR", "currentadapterがnullです");
+                }
                 return true;
             }
 
@@ -186,7 +204,7 @@ namespace AndroidApp
 
         private void FabOnClick(object sender, EventArgs eventArgs)
         {
-            if (isloadedwords)
+            if (Genreid != -1)
             {
                 WordEnterFragment word = new WordEnterFragment(this, genres[Genreid].GenreName);
                 word.Show(SupportFragmentManager.BeginTransaction(), "register");
@@ -206,7 +224,6 @@ namespace AndroidApp
             {
                 maincontentlayout.RemoveAllViews();
                 CreateGenreList();
-                toolbar.InflateMenu(Resource.Menu.menu_main);
             }
 
             else if (id == Resource.Id.nav_quiz)
@@ -215,7 +232,7 @@ namespace AndroidApp
                 {
                     if (CurrentWordlist.Length == 0)
                     {
-                        ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc));
+                        DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc), this);
                         return false;
                     }
                     else
@@ -230,7 +247,7 @@ namespace AndroidApp
                 }
                 else
                 {
-                    ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc));
+                    DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc), this);
                     return false;
                 }
 
@@ -241,7 +258,7 @@ namespace AndroidApp
                 {
                     if (CurrentWordlist.Length == 0)
                     {
-                        ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc));
+                        DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc), this);
                         return false;
                     }
                     else
@@ -252,12 +269,12 @@ namespace AndroidApp
                             v.FindViewById<TextView>(Resource.Id.quiz_question),
                             v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
                             v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),
-                            WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName));
+                            WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName, Genreid));
                     }
                 }
                 else
                 {
-                    ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc));
+                    DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc), this);
                     return false;
                 }
             }
@@ -273,7 +290,7 @@ namespace AndroidApp
                 {
                     if (genres[Genreid].Results.Count == 0)
                     {
-                        ShowWarning(Resources.GetString(Resource.String.dialog_notestdata_title), Resources.GetString(Resource.String.dialog_notestdata_desc));
+                        DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_notestdata_title), Resources.GetString(Resource.String.dialog_notestdata_desc), this);
                         return false;
                     }
                     else
@@ -287,16 +304,16 @@ namespace AndroidApp
                 }
                 else
                 {
-                    ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc));
+                    DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc), this);
                     return false;
                 }
 
 
 
             }
-            else if (id == Resource.Id.nav_send)
+            else if (id == Resource.Id.nav_settings)
             {
-
+                //RecyclerViewComponents.CreateRemovalDoublelineList(this,maincontentlayout);
             }
 
             if (id == Resource.Id.nav_wordlist)
@@ -310,33 +327,30 @@ namespace AndroidApp
             }
             DrawerLayout drawer = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             drawer.CloseDrawer(GravityCompat.Start);
-            if (isloadedwords)
+            if (Genreid != -1)
             {
                 GenreStruct g = new GenreStruct(genres[Genreid].GenreName, CurrentWordlist, genres[Genreid].Results);
                 genres[Genreid] = g;
-                isloadedwords = false;
+                //isloadedwords = false;
+                Genreid = -1;
+                RemovalAdapterCheck();
             }
             CurrentWordlist = null;
-            Genreid = -1;
             return true;
         }
 
-        private void ShowWarning(string title, string message)
-        {
-            Android.Support.V7.App.AlertDialog.Builder a = new Android.Support.V7.App.AlertDialog.Builder(this);
-            a.SetTitle(title);
-            a.SetMessage(message);
-            a.SetPositiveButton("OK", (sb, f) => { });
-            a.Show();
-        }
+
         public void RecyclerView_OnClick(object sender, Adapter1ClickEventArgs e)
         {
-            if (!isloadedwords)
+            if (Genreid == -1)
             {
-                RecyclerViewComponents.CreateDoublelineList(genres[e.Position].Words.ToArray(), this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e.Position); }, RecyclerView_OnClick);
+                RemovalAdapter1 adapter1 = new RemovalAdapter1(genres[e.Position].Words.ToArray());
+                adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, e.Position); };
+                adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
+                adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
+                RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e.Position); });
                 CurrentWordlist = genres[e.Position].Words.ToArray();
                 Genreid = e.Position;
-                isloadedwords = true;
             }
         }
 

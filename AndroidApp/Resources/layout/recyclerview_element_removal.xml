@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:paddingLeft="16dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="auto">
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/radioButton_removal"
+        android:clickable="false"
+        android:longClickable="false" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:id="@+id/maintitle_removal"
+            android:text="Title"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:minHeight="0dp"
+            android:maxHeight="0dp"
+            android:textColor="@android:color/background_dark"
+            android:textAlignment="gravity"
+            android:gravity="left|bottom"/>
+        <TextView
+            android:id="@+id/description_removal"
+            android:text="Description"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:maxHeight="0dp"
+            android:textColor="#66000000"
+            android:textAlignment="gravity"
+            android:gravity="left|bottom"/>
+    </LinearLayout>
+
+</LinearLayout>

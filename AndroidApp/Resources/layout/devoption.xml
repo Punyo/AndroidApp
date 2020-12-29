@@ -7,12 +7,12 @@
     android:minWidth="25px"
     android:minHeight="25px">
     <Button
-        android:text="Jsonインポート"
+        android:text="データをインポート"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_jsonimport" />
     <Button
-        android:text="Jsonエクスポート"
+        android:text="データを外部ストレージへエクスポート"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_jsonexport" />

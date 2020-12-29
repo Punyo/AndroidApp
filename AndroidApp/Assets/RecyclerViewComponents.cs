@@ -18,45 +18,60 @@ namespace AndroidApp.Assets
     {
         public static void CreateDoublelineList(DoublelineListStruct[] words, Activity activity, LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
-            Adapter1 adapter = new Adapter1(words);
+            SimpleAdapter adapter = new SimpleAdapter(words);
             IntlList(ref activity, ref view, ref adapter, onswipe);
-            if (clickevent.Target != null)
-            {
-                adapter.ItemClick += clickevent;
-            }
+            SetEvents(clickevent, adapter);
         }
 
         public static void CreateDoublelineList(string[] titles, string[] description, Activity activity, LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
-            Adapter1 adapter = new Adapter1(titles, description);
+            SimpleAdapter adapter = new SimpleAdapter(titles, description);
             IntlList(ref activity, ref view, ref adapter, onswipe);
-            if (clickevent.Target != null)
-            {
-                adapter.ItemClick += clickevent;
-            }
+            SetEvents(clickevent, adapter);
         }
 
         public static void CreateDoublelineList(DoublelineListStruct[] words, Activity activity, int recyclerviewid, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
-            Adapter1 adapter = new Adapter1(words);
-            IntlList(ref activity,recyclerviewid, ref adapter, onswipe);
+            SimpleAdapter adapter = new SimpleAdapter(words);
+            IntlList(ref activity, recyclerviewid, ref adapter, onswipe);
+            SetEvents(clickevent, adapter);
+        }
+
+        public static void CreateDoublelineList(string[] titles, string[] description, Activity activity, int recyclerviewid, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
+        {
+            SimpleAdapter adapter = new SimpleAdapter(titles, description);
+            IntlList(ref activity, recyclerviewid, ref adapter, onswipe);
+            SetEvents(clickevent, adapter);
+        }
+
+        public static void CreateRemovalDoublelineList(RemovalAdapter1 adapter, Activity activity, LinearLayout maincontentlayout, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        {          
+            maincontentlayout.RemoveAllViews();
+            activity.LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
+            RecyclerView recyclerView = activity.FindViewById<RecyclerView>(Resource.Id.list_view);
+            LinearLayoutManager manager = new LinearLayoutManager(activity);
+            recyclerView.SetLayoutManager(manager);
+            recyclerView.SetAdapter(adapter);
+            RecyclerView.ItemDecoration deco = new DividerItemDecoration(activity, DividerItemDecoration.Vertical);
+            recyclerView.AddItemDecoration(deco);
+            if (onswipe != null)
+            {
+                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, adapter);
+                swiper.OnSwipe += onswipe;
+                var item = new ItemTouchHelper(swiper);
+                item.AttachToRecyclerView(recyclerView);
+            }
+        }
+
+        private static void SetEvents(EventHandler<Adapter1ClickEventArgs> clickevent, SimpleAdapter adapter)
+        {
             if (clickevent != null)
             {
                 adapter.ItemClick += clickevent;
             }
         }
 
-        public static void CreateDoublelineList(string[] titles, string[] description, Activity activity,int recyclerviewid, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
-        {
-            Adapter1 adapter = new Adapter1(titles, description);
-            IntlList(ref activity,recyclerviewid, ref adapter, onswipe);
-            if (clickevent.Target != null)
-            {
-                adapter.ItemClick += clickevent;
-            }
-        }
-
-        private static void IntlList(ref Activity activity, ref LinearLayout maincontentlayout, ref Adapter1 adapter, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        private static void IntlList(ref Activity activity, ref LinearLayout maincontentlayout, ref SimpleAdapter adapter, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {
             maincontentlayout.RemoveAllViews();
             activity.LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
@@ -68,13 +83,13 @@ namespace AndroidApp.Assets
             recyclerView.AddItemDecoration(deco);
             if (onswipe != null)
             {
-                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
+                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, adapter);
                 swiper.OnSwipe += onswipe;
                 var item = new ItemTouchHelper(swiper);
                 item.AttachToRecyclerView(recyclerView);
             }
         }
-        private static void IntlList(ref Activity activity, int recyclerviewId, ref Adapter1 adapter, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        private static void IntlList(ref Activity activity, int recyclerviewId, ref SimpleAdapter adapter, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {
             RecyclerView recyclerView = activity.FindViewById<RecyclerView>(recyclerviewId);
             LinearLayoutManager manager = new LinearLayoutManager(activity);
@@ -84,7 +99,7 @@ namespace AndroidApp.Assets
             recyclerView.AddItemDecoration(deco);
             if (onswipe != null)
             {
-                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, ref adapter);
+                RecyclerViewItemSwiper swiper = new RecyclerViewItemSwiper(ItemTouchHelper.Left, ItemTouchHelper.Left, adapter);
                 swiper.OnSwipe += onswipe;
                 var item = new ItemTouchHelper(swiper);
                 item.AttachToRecyclerView(recyclerView);

@@ -26,7 +26,8 @@ namespace AndroidApp.Assets
         private string genre_name;
         private string datapath;
         private EventHandler a;
-        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, string scoredatapath, bool faststart, string genrename)
+        private int id;
+        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, string scoredatapath, bool faststart, string genrename,int genreid)
             : base(activity, words, edit, question, answerbutton, image, faststart)
         {
             mainactivity = activity;
@@ -35,6 +36,7 @@ namespace AndroidApp.Assets
             base.OnCorrect += SetResult;
             base.OnMiss += SetResult;
             genre_name = genrename;
+            id = genreid;
             questionStruct = new TestQuestionStruct[questions.Length];
             results = new QuestionResult[questions.Length];
             for (int i = 0; i < questions.Length; i++)
@@ -133,7 +135,7 @@ namespace AndroidApp.Assets
             Array.Resize(ref pastresults, pastresults.Length + 1);
             pastresults[pastresults.Length - 1] = JsonSerializer.Deserialize<TestResultStruct>(content);
             await FileIO.WriteFileAsync(datapath, content, FileMode.Append);
-            mainactivity.SetTestResults(pastresults, mainactivity.Genreid);
+            mainactivity.SetTestResults(pastresults, id);
             button.Click += a;
         }
     }

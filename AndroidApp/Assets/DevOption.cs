@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO.Compression;
 
 using Android.App;
 using Android.Content;
@@ -11,6 +11,7 @@ using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 using Xamarin.Essentials;
+using System.IO;
 
 namespace AndroidApp.Assets
 {
@@ -18,6 +19,7 @@ namespace AndroidApp.Assets
     {
         private Android.Support.V4.App.FragmentManager fragment;
         private MainActivity a;
+        public static readonly Java.IO.File ZIPPATH = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments);
         public DevOption(Button jsonimport, Button jsonexport, Android.Support.V4.App.FragmentManager transaction, MainActivity activity)
         {
             jsonimport.Click += OpenImport;
@@ -26,11 +28,9 @@ namespace AndroidApp.Assets
             a = activity;
         }
 
-        private async void OpenExport(object sender, EventArgs e)
+        private void OpenExport(object sender, EventArgs e)
         {
-            await Clipboard.SetTextAsync(WordManager.SerializeWordStructArray(a.CurrentWordlist));
-            View view = (View)sender;
-            Snackbar.Make(view, "Jsonをクリップボードにコピーしました", Snackbar.LengthLong).Show();               
+            System.IO.Compression.ZipFile.CreateFromDirectory(MainActivity.GENREFOLDERDIR, Path.Combine(ZIPPATH.AbsolutePath, $"SAVE({DateTime.Now.ToString().Replace("/",string.Empty)}).zip"));
         }
 
         private void OpenImport(object sender, EventArgs e)

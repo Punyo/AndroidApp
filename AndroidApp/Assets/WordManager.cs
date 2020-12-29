@@ -91,14 +91,25 @@ namespace AndroidApp.Assets
     {
         public string GenreName { get; }
         public List<DoublelineListStruct> Words { get; set; }
-        public ReadOnlyCollection<TestResultStruct> Results { get { return res.AsReadOnly(); } }
+        public ReadOnlyCollection<TestResultStruct> Results
+        {
+            get
+            {
+                if (res != null)
+                {
+                    return res.AsReadOnly();
+                }
+                res = new List<TestResultStruct>();
+                return new ReadOnlyCollection<TestResultStruct>(res.AsReadOnly());
+            }
+        }
         private List<TestResultStruct> res;
 
         public GenreStruct(string name, IEnumerable<DoublelineListStruct> words, IEnumerable<TestResultStruct> results = null)
         {
             GenreName = name;
             Words = words.ToList();
-            if (results!=null)
+            if (results != null)
             {
                 res = results.ToList();
             }

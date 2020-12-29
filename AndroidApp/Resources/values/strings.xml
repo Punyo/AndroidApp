@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">AndroidApp</string>
+    <string name="app_version">1.0.0</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="dialog_register">登録</string>
     <string name="dialog_cancel">キャンセル</string>
+    <string name="dialog_deleteelements">[SELECTINGELEMENTSCOUNT]個の要素を削除します。よろしいですか？</string>
     <string name="quiz_checkanswer">答え合わせ</string>
     <string name="quiz_next">次の問題</string>
     <string name="dialog_notselect_title">項目未選択</string>

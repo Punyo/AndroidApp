@@ -4,6 +4,6 @@
     <SelectedDevice>Samsung SC-04J</SelectedDevice>
     <AndroidDesignerPreferredTheme>AppTheme</AndroidDesignerPreferredTheme>
     <AndroidDesignerPreferredDevice>pixel_2_xl</AndroidDesignerPreferredDevice>
-    <DefaultDevice>my_device</DefaultDevice>
+    <DefaultDevice>8_0</DefaultDevice>
   </PropertyGroup>
 </Project>

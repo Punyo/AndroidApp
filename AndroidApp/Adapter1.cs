@@ -6,18 +6,18 @@ using Android.Support.V7.Widget;
 
 namespace AndroidApp.Assets
 {
-    public class Adapter1 : RecyclerView.Adapter
+    public class SimpleAdapter : RecyclerView.Adapter
     {
         public event EventHandler<Adapter1ClickEventArgs> ItemClick;
         public event EventHandler<Adapter1ClickEventArgs> ItemLongClick;
         public DoublelineListStruct[] Word;
 
-        public Adapter1(DoublelineListStruct[] words)
+        public SimpleAdapter(DoublelineListStruct[] words)
         {
             Word = words;
         }
 
-        public Adapter1(string[] title, string[] description)
+        public SimpleAdapter(string[] title, string[] description)
         {
             DoublelineListStruct[] words = new DoublelineListStruct[title.Length];
             for (int i = 0; i < words.Length; i++)
@@ -55,7 +55,7 @@ namespace AndroidApp.Assets
 
         public void RemoveAt(int index)
         {
-            Word[index] = new DoublelineListStruct();
+            //Word[index] = new DoublelineListStruct();
             for (int i = index; i < Word.Length; i++)
             {
                 if (Word.Length - 1 != i)
