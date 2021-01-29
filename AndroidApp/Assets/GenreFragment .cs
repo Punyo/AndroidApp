@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
+﻿using System.IO;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 
 namespace AndroidApp.Assets
 {
-    public class GenreFragment : Android.Support.V4.App.DialogFragment
+    public class GenreFragment : AndroidX.Fragment.App.DialogFragment
     {
         private View view;
         private MainActivity main;
@@ -32,7 +27,7 @@ namespace AndroidApp.Assets
         public override Dialog OnCreateDialog(Bundle savedInstanceState)
         {
             base.OnCreateDialog(savedInstanceState);
-            Android.Support.V7.App.AlertDialog.Builder builder = new Android.Support.V7.App.AlertDialog.Builder(Activity);
+            AndroidX.AppCompat.App.AlertDialog.Builder builder = new AndroidX.AppCompat.App.AlertDialog.Builder(Activity);
             view = Activity.LayoutInflater.Inflate(Resource.Layout.dialog_genre, null);
             builder.SetView(view).SetTitle("項目を作成")
                 .SetNegativeButton(Resource.String.dialog_cancel, Cancel)

@@ -4,13 +4,15 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 using System.IO;
 using System.IO.Compression;
 using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
-    public class JsonFragment : Android.Support.V4.App.DialogFragment
+    public class JsonFragment : AndroidX.Fragment.App.DialogFragment
     {
         private View view;
         private EditText text;
@@ -23,7 +25,7 @@ namespace AndroidApp.Assets
         public override Dialog OnCreateDialog(Bundle savedInstanceState)
         {
             base.OnCreateDialog(savedInstanceState);
-            Android.Support.V7.App.AlertDialog.Builder builder = new Android.Support.V7.App.AlertDialog.Builder(Activity);
+            AndroidX.AppCompat.App.AlertDialog.Builder builder = new AndroidX.AppCompat.App.AlertDialog.Builder(Activity);
             view = Activity.LayoutInflater.Inflate(Resource.Layout.dialog_directjson, null);
             text = view.FindViewById<EditText>(Resource.Id.jsonenter_textview);
             builder.SetView(view).SetTitle("データインポート")

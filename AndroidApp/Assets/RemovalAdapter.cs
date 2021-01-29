@@ -2,12 +2,11 @@
 
 using Android.Views;
 using Android.Widget;
-using Android.Support.V7.Widget;
 using System.Collections.Generic;
-using Android.Content.Res;
 using Xamarin.Essentials;
 using Android.App;
 using System.Collections.ObjectModel;
+using AndroidX.RecyclerView.Widget;
 
 namespace AndroidApp.Assets
 {
@@ -160,7 +159,7 @@ namespace AndroidApp.Assets
                     }
                     selectingelements.Clear();
                     OnRemoveExcuted?.Invoke(Word);
-                }, (a, v) => { }, main.Resources.GetString(Resource.String.dialog_cancel));
+                }, (a, v) => { }, main.Resources.GetString(Resource.String.dialog_delete), main.Resources.GetString(Resource.String.dialog_cancel));
         }
     }
 

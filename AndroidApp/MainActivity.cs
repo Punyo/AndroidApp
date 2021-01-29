@@ -4,22 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Android;
 using Android.App;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.Design.Widget;
-using Android.Support.V4.View;
-using Android.Support.V4.Widget;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
 using Android.Util;
 using Android.Views;
-using Android.Views.Animations;
 using Android.Widget;
 using AndroidApp.Assets;
+using AndroidX.AppCompat.App;
+using AndroidX.Core.View;
+using AndroidX.DrawerLayout.Widget;
+using Google.Android.Material.FloatingActionButton;
+using Google.Android.Material.Navigation;
 using Microcharts.Droid;
 
 namespace AndroidApp
@@ -27,7 +23,7 @@ namespace AndroidApp
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true, ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
     public class MainActivity : AppCompatActivity, NavigationView.IOnNavigationItemSelectedListener
     {
-        private Android.Support.V7.Widget.Toolbar toolbar;
+        private AndroidX.AppCompat.Widget.Toolbar toolbar;
         private DrawerLayout drawer;
         public LinearLayout maincontentlayout { private set; get; }
         private FloatingActionButton fab;
@@ -50,7 +46,7 @@ namespace AndroidApp
             Genreid = -1;
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
-            toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
+            toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
 
             fab = FindViewById<FloatingActionButton>(Resource.Id.fab);

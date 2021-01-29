@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Util;
 using Android.Views;
-using Android.Support.V4.App;
 using Android.Widget;
-using Android.Support.V7.App;
-using Android.App;
 using System.IO;
+using AndroidX.Fragment.App;
+using AndroidX.AppCompat.App;
+using Android.App;
 
 namespace AndroidApp.Assets
 {
-    public class WordEnterFragment : Android.Support.V4.App.DialogFragment
+    public class WordEnterFragment : AndroidX.Fragment.App.DialogFragment
     {
         private MainActivity activityinstance;
         private EditText title_field;
@@ -36,7 +31,7 @@ namespace AndroidApp.Assets
         public override Dialog OnCreateDialog(Bundle savedInstanceState)
         {
             base.OnCreateDialog(savedInstanceState);
-            Android.Support.V7.App.AlertDialog.Builder builder = new Android.Support.V7.App.AlertDialog.Builder(Activity);
+            AndroidX.AppCompat.App.AlertDialog.Builder builder = new AndroidX.AppCompat.App.AlertDialog.Builder(Activity);
             view = Activity.LayoutInflater.Inflate(Resource.Layout.dialog_wordenter, null);
             builder.SetView(view).SetTitle("単語を登録")
                 .SetNegativeButton(Resource.String.dialog_cancel, Cancel)

@@ -1,0 +1,66 @@
+[33mcommit 5317c34cc2488b84d1c91f5d628a9114bbc8bf87[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Tue Dec 29 22:04:26 2020 +0900
+
+    RemovalAdapter実装
+
+[33mcommit 547436d0755f9c3d107eef72e6bf9304ff5117d7[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Thu Dec 10 20:38:59 2020 +0900
+
+    バグ修正
+
+[33mcommit 55bb6202b2144253193e3391b01e5e845358c096[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Thu Nov 19 00:04:09 2020 +0900
+
+    統計機能の完成
+    細かなバグ修正
+
+[33mcommit afc17d4bf35d944117b54c6b74abf8d1a41ebfbf[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Tue Nov 3 20:11:02 2020 +0900
+
+    テスト機能実装
+
+[33mcommit 65ef771d13532a4a6823e61e2f228ac866ce4c76[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Tue Nov 3 14:18:46 2020 +0900
+
+    細かな修正
+
+[33mcommit 906860aaaee91df57731c2f9ec88bc23f770d885[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Tue Nov 3 01:49:53 2020 +0900
+
+    CreateDoublelineListWithSwipe()をRecyclerViewComponents.csに移動
+
+[33mcommit 5fa80f8f5b09cafacfdf1621f6c7a0ab8193e743[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Tue Nov 3 00:11:46 2020 +0900
+
+    細かな変更
+
+[33mcommit a8ddd804b368c4b2186f2db9fe2028b67f90bbfb[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Mon Oct 26 22:14:17 2020 +0900
+
+    WordStructの名前変更,Genreをスワイプで消す機能の実装
+
+[33mcommit b1b7c1cb74c9ad1394dfcf0c3eb9f631f8d154c3[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Mon Oct 26 16:07:01 2020 +0900
+
+    Update .gitignore
+
+[33mcommit b650f9d225c4f6c2ca8803404ca613e059b26e83[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Mon Oct 26 16:03:23 2020 +0900
+
+    スワイプして削除する機能の実装
+
+[33mcommit d8a27ec215f122e01ecaca2846983e2616fe4bf9[m
+Author: Punyo <49717092+Punyo@users.noreply.github.com>
+Date:   Sat Oct 24 21:31:58 2020 +0900
+
+    初期リリース

@@ -3,7 +3,6 @@
 using Android.App;
 using Android.Widget;
 using Microcharts;
-using System.Linq;
 using Microcharts.Droid;
 
 namespace AndroidApp.Assets
