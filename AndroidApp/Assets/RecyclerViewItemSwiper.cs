@@ -78,11 +78,11 @@ namespace AndroidApp.Assets
         {
             if (removaladapter == null)
             {
-                if (removaladapter.SelectedElements.Count == 0)
-                {
+                //if (removaladapter.SelectedElements.Count == 0)
+                //{
                     viewadapter.RemoveAt(viewHolder.AdapterPosition);
                     OnSwipe?.Invoke(viewadapter.Word);
-                }
+                //}
             }
             else
             {

@@ -3,6 +3,7 @@
 using Android.App;
 using Android.Views.Animations;
 using Android.Widget;
+using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
@@ -15,7 +16,7 @@ namespace AndroidApp.Assets
         public readonly Button button;
         private ImageView marubatsu;
         private Animation animation;
-        private EditText textfield;
+        public readonly EditText textfield;
 
         public delegate void QuestionInfo(int index, QuestionResult result);
         public event QuestionInfo OnCorrect;
@@ -71,6 +72,10 @@ namespace AndroidApp.Assets
                 marubatsu.SetImageResource(Resource.Drawable.maru);
                 CorrectCount++;
                 OnCorrect?.Invoke(currentquestionindex, QuestionResult.Correct);
+                if (!Preferences.Get("test_and _quiz_enableanim", true))
+                {
+                    questiontext.Text = "正解";
+                }
             }
             else
             {
@@ -79,7 +84,12 @@ namespace AndroidApp.Assets
                 questiontext.SetTextColor(Android.Graphics.Color.Red);
                 OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
             }
-            marubatsu.StartAnimation(animation);
+
+            if (Preferences.Get("test_and _quiz_enableanim", true))
+            {
+                marubatsu.StartAnimation(animation);
+            }
+
             button.Text = currentactivity.GetString(Resource.String.quiz_next);
             button.Click -= CheckAnswer;
             button.Click += NextQuestion;

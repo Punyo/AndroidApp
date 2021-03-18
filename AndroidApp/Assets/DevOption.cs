@@ -2,20 +2,19 @@
 using Android.Widget;
 using System.IO;
 using AndroidX.Fragment.App;
+using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
     class DevOption
     {
         private FragmentManager fragment;
-        private MainActivity a;
-        public static readonly Java.IO.File ZIPPATH = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments);
-        public DevOption(Button jsonimport, Button jsonexport, FragmentManager transaction, MainActivity activity)
+        public static readonly Java.IO.File ZIPPATH = Platform.CurrentActivity.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments);
+        public DevOption(Button jsonimport, Button jsonexport, FragmentManager transaction)
         {
             jsonimport.Click += OpenImport;
             jsonexport.Click += OpenExport;
             fragment = transaction;
-            a = activity;
         }
 
         private void OpenExport(object sender, EventArgs e)

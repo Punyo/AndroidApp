@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -77,6 +77,7 @@
     </Compile>
     <Compile Include="Assets\DevOption.cs" />
     <Compile Include="Assets\DialogComponents.cs" />
+    <Compile Include="Assets\EraConverter.cs" />
     <Compile Include="Assets\FileIO.cs" />
     <Compile Include="Assets\GenreFragment .cs" />
     <Compile Include="Assets\JsonFragment.cs" />
@@ -85,7 +86,8 @@
     <Compile Include="Assets\RecyclerViewItemSwiper.cs" />
     <Compile Include="Assets\RemovalAdapter.cs" />
     <Compile Include="Assets\ScoreAnalyticsManager.cs" />
-    <Compile Include="Assets\SettingsManager.cs" />
+    <Compile Include="Assets\SettingsFragment.cs" />
+    <Compile Include="Assets\SettingsSaver.cs" />
     <Compile Include="Assets\TestManager.cs" />
     <Compile Include="Assets\WordEnterFragment.cs" />
     <Compile Include="Assets\WordManager.cs" />
@@ -165,7 +167,8 @@
       <Version>1.1.1.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
-  <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.0-preview03" /></ItemGroup>
+    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.0-preview03" />
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\recyclerview_element.xml" />
   </ItemGroup>
@@ -361,13 +364,18 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\preferencescreen\settingprefs.xml">
+    <AndroidResource Include="Resources\xml\settingsprefs.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\arrays.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-    <Target Name="BeforeBuild"> 
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
 </Project>

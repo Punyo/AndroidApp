@@ -159,7 +159,7 @@ namespace AndroidApp.Assets
                     }
                     selectingelements.Clear();
                     OnRemoveExcuted?.Invoke(Word);
-                }, (a, v) => { }, main.Resources.GetString(Resource.String.dialog_delete), main.Resources.GetString(Resource.String.dialog_cancel));
+                }, (a, v) => { }, main.Resources.GetString(Resource.String.dialog_delele), main.Resources.GetString(Resource.String.dialog_cancel));
         }
     }
 

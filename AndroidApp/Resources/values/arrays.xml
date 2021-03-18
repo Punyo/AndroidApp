@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="setting_common_eras">
+    <item>グレゴリオ暦</item>
+    <item>和暦</item>
+    <item>主体暦</item>
+  </string-array>
+</resources>

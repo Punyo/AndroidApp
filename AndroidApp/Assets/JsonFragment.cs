@@ -45,10 +45,14 @@ namespace AndroidApp.Assets
                     Directory.Delete(item, true);
                 }
                 ZipFile.ExtractToDirectory(text.Text, MainActivity.GENREFOLDERDIR);
+                if (Directory.Exists(Path.Combine(MainActivity.GENREFOLDERDIR, ".__override__")))
+                {
+                    Directory.Delete(Path.Combine(MainActivity.GENREFOLDERDIR, ".__override__"),true);
+                }
             }
             catch (System.Exception e)
             {
-                //throw e;
+                throw e;
                 DialogComponents.ShowWarning(e.Message, e.StackTrace, Platform.CurrentActivity);
             }
         }

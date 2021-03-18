@@ -17,6 +17,7 @@ using AndroidX.DrawerLayout.Widget;
 using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.Navigation;
 using Microcharts.Droid;
+using Xamarin.Essentials;
 
 namespace AndroidApp
 {
@@ -67,9 +68,10 @@ namespace AndroidApp
             genres = new List<GenreStruct>();
             OnNavigationItemSelected(navigationView.Menu.GetItem(0));
             toolbar.InflateMenu(Resource.Menu.menu_main);
+            _ = RequestPermission();
         }
 
-        public async void CreateGenreList()
+        public async Task CreateGenreList()
         {
             if (Genretitles == null && Genredescriptions == null)
             {
@@ -91,7 +93,7 @@ namespace AndroidApp
                     string name = dirs[i].Remove(0, dirs[i].LastIndexOf("/") + 1).Replace(GenreFragment.TAG, string.Empty);
                     DateTime creationtime = Directory.GetCreationTime(Path.Combine(GENREFOLDERDIR, dirs[i]));
                     Genretitles.Add(name);
-                    Genredescriptions.Add($"作成日時：{creationtime.Year}/{creationtime.Month}/{creationtime.Day}");
+                    Genredescriptions.Add("作成日時：" + EraConverter.ConvertToCalendar(creationtime));
                     string json = FileIO.ReadFile(Path.Combine(dirs[i], SAVEDATANAME));
                     if (!string.IsNullOrEmpty(json))
                     {
@@ -132,7 +134,7 @@ namespace AndroidApp
                     {
                         jsons = File.ReadAllLines(Path.Combine(dirs[i], SCOREDATANAME));
                     }
-                    catch (FileNotFoundException e)
+                    catch (FileNotFoundException)
                     {
                         await FileIO.WriteFileAsync(Path.Combine(dirs[i], SCOREDATANAME), string.Empty, FileMode.Open);
                     }
@@ -174,7 +176,7 @@ namespace AndroidApp
                 if (currentadapter.SelectedElements.Count > 0)
                 {
                     toolbar.Menu.Clear();
-                    currentadapter = null;                  
+                    currentadapter = null;
                 }
             }
         }
@@ -274,12 +276,12 @@ namespace AndroidApp
                     return false;
                 }
             }
-            else if (id == Resource.Id.nav_devoption)
-            {
-                maincontentlayout.RemoveAllViews();
-                View v = LayoutInflater.Inflate(Resource.Layout.devoption, maincontentlayout);
-                new DevOption(v.FindViewById<Button>(Resource.Id.button_jsonimport), v.FindViewById<Button>(Resource.Id.button_jsonexport), SupportFragmentManager, this);
-            }
+            //else if (id == Resource.Id.nav_devoption)
+            //{
+            //    maincontentlayout.RemoveAllViews();
+            //    View v = LayoutInflater.Inflate(Resource.Layout.devoption, maincontentlayout);
+            //    new DevOption(v.FindViewById<Button>(Resource.Id.button_jsonimport), v.FindViewById<Button>(Resource.Id.button_jsonexport), SupportFragmentManager);
+            //}
             else if (id == Resource.Id.nav_share)
             {
                 if (Genreid != -1)
@@ -309,7 +311,8 @@ namespace AndroidApp
             }
             else if (id == Resource.Id.nav_settings)
             {
-                //RecyclerViewComponents.CreateRemovalDoublelineList(this,maincontentlayout);
+                maincontentlayout.RemoveAllViews();
+                SupportFragmentManager.BeginTransaction().Replace(Resource.Id.main_content_Layout, new SettingsFragment()).Commit();
             }
 
             if (id == Resource.Id.nav_wordlist)
@@ -378,6 +381,22 @@ namespace AndroidApp
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+        private async Task RequestPermission()
+        {
+#if DEBUG
+            var permissioncheck = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+            if (permissioncheck != PermissionStatus.Granted)
+            {
+                var requestres = await Permissions.RequestAsync<Permissions.StorageWrite>();
+                if (requestres != PermissionStatus.Granted)
+                {
+                    Platform.CurrentActivity.FinishAndRemoveTask();
+                }
+            }
+#endif
+        }
+
         public void SetTestResults(TestResultStruct[] result, int genreid)
         {
             genres[genreid].SetTestResult(result.ToList());

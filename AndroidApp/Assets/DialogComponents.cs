@@ -7,7 +7,6 @@ namespace AndroidApp.Assets
 {
     class DialogComponents
     {
-        private static AlertDialog.Builder builder;
 
         public static void ShowWarning(string title, string message, Context builder)
         {           

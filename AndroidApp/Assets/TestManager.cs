@@ -90,6 +90,7 @@ namespace AndroidApp.Assets
             button.Click -= base.NextQuestion;
             button.Click -= CheckAnswer;
             button.Click += Button_Click;
+            base.textfield.Text = string.Empty;
             questioncount++;
         }
 
