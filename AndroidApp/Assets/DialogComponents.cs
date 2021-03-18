@@ -1,15 +1,14 @@
-﻿using System;
-using Android.Content;
-using Android.Views;
+﻿using Android.Content;
 using AndroidX.AppCompat.App;
+using System;
 
 namespace AndroidApp.Assets
 {
-    class DialogComponents
+    internal class DialogComponents
     {
 
         public static void ShowWarning(string title, string message, Context builder)
-        {           
+        {
             AlertDialog.Builder a = new AlertDialog.Builder(builder);
             a.SetTitle(title);
             a.SetMessage(message);
@@ -18,7 +17,7 @@ namespace AndroidApp.Assets
         }
         public static void ShowWarning(string title, string message, Context builder, EventHandler<DialogClickEventArgs> positive, EventHandler<DialogClickEventArgs> negative, string positivemessage, string negativemessage)
         {
-           AlertDialog.Builder a = new AlertDialog.Builder(builder);
+            AlertDialog.Builder a = new AlertDialog.Builder(builder);
             a.SetTitle(title);
             a.SetMessage(message);
             a.SetPositiveButton(positivemessage, positive);

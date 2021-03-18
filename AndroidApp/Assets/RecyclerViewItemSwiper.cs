@@ -6,11 +6,11 @@ namespace AndroidApp.Assets
 {
     public class RecyclerViewItemSwiper : ItemTouchHelper.SimpleCallback
     {
-        private SimpleAdapter viewadapter;
-        private RemovalAdapter1 removaladapter;
+        private readonly SimpleAdapter viewadapter;
+        private readonly RemovalAdapter1 removaladapter;
 
 
-        private ColorDrawable drawable;
+        private readonly ColorDrawable drawable;
 
         private Canvas canvas;
 
@@ -52,7 +52,7 @@ namespace AndroidApp.Assets
             }
             return base.GetDragDirs(recyclerView, viewHolder);
         }
-        
+
         public override void OnChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, bool isCurrentlyActive)
         {
             DrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -80,8 +80,8 @@ namespace AndroidApp.Assets
             {
                 //if (removaladapter.SelectedElements.Count == 0)
                 //{
-                    viewadapter.RemoveAt(viewHolder.AdapterPosition);
-                    OnSwipe?.Invoke(viewadapter.Word);
+                viewadapter.RemoveAt(viewHolder.AdapterPosition);
+                OnSwipe?.Invoke(viewadapter.Word);
                 //}
             }
             else

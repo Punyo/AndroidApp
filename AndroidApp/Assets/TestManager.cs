@@ -1,25 +1,25 @@
-﻿using System;
+﻿using Android.Widget;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Android.Widget;
 
 namespace AndroidApp.Assets
 {
-    class TestManager : QuizManager
+    internal class TestManager : QuizManager
     {
-        private MainActivity mainactivity;
-        private DoublelineListStruct[] questions;
-        private TestQuestionStruct[] questionStruct;
+        private readonly MainActivity mainactivity;
+        private readonly DoublelineListStruct[] questions;
+        private readonly TestQuestionStruct[] questionStruct;
         private TestResultStruct[] pastresults;
         private int questioncount;
         private int lastcorrect;
-        private QuestionResult[] results;
-        private string genre_name;
-        private string datapath;
-        private EventHandler a;
-        private int id;
-        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, string scoredatapath, bool faststart, string genrename,int genreid)
+        private readonly QuestionResult[] results;
+        private readonly string genre_name;
+        private readonly string datapath;
+        private readonly EventHandler a;
+        private readonly int id;
+        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, string scoredatapath, bool faststart, string genrename, int genreid)
             : base(activity, words, edit, question, answerbutton, image, faststart)
         {
             mainactivity = activity;
@@ -107,7 +107,7 @@ namespace AndroidApp.Assets
 
         private async void ShowResult(object sender, EventArgs e)
         {
-            double correctpercent = Math.Round((double)CorrectCount / (double)questions.Length, 3) * 100;
+            double correctpercent = Math.Round(CorrectCount / (double)questions.Length, 3) * 100;
             questiontext.Text = $"正解:{base.CorrectCount}"
                 + System.Environment.NewLine
                 + $"不正解:{questions.Length - CorrectCount}"

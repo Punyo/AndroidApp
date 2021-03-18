@@ -1,21 +1,20 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Views.Animations;
 using Android.Widget;
+using System;
 using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
-    class QuizManager
+    internal class QuizManager
     {
         public readonly Activity currentactivity;
-        private DoublelineListStruct[] wordlist;
+        private readonly DoublelineListStruct[] wordlist;
         private int currentquestionindex;
         public readonly TextView questiontext;
         public readonly Button button;
-        private ImageView marubatsu;
-        private Animation animation;
+        private readonly ImageView marubatsu;
+        private readonly Animation animation;
         public readonly EditText textfield;
 
         public delegate void QuestionInfo(int index, QuestionResult result);

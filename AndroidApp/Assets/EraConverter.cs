@@ -1,20 +1,9 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using AndroidX.Preference;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
-    class EraConverter
+    internal class EraConverter
     {
         private const int JucheStart = 1912;
         private static JapaneseCalendar japanese;

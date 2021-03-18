@@ -1,20 +1,19 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Widget;
 using Microcharts;
 using Microcharts.Droid;
+using System;
 
 namespace AndroidApp.Assets
 {
-    class ScoreAnalyticsManager
+    internal class ScoreAnalyticsManager
     {
-        private ChartView chartview;
-        private LineChart linechart;
+        private readonly ChartView chartview;
+        private readonly LineChart linechart;
         private ChartEntry[] entries;
-        private TextView title;
-        private Activity a;
-        private int id;
+        private readonly TextView title;
+        private readonly Activity a;
+        private readonly int id;
         public ScoreAnalyticsManager(Activity activity, int recyclerviewid, TextView titletext, ChartView chart, TestResultStruct[] results)
         {
             linechart = new LineChart();
@@ -94,7 +93,7 @@ namespace AndroidApp.Assets
         {
             int correctcount = 0;
             correctcount = Array.FindAll(questions, x => x.Result == QuestionResult.Correct).Length;
-            return Math.Round((double)correctcount / (double)questions.Length, 3) * 100;
+            return Math.Round(correctcount / (double)questions.Length, 3) * 100;
         }
         private static DoublelineListStruct[] GetDoublelineListStruct(Accurately[] a)
         {

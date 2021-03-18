@@ -1,20 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using AndroidX.Preference;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
-    class SettingsFragment : PreferenceFragmentCompat
+    internal class SettingsFragment : PreferenceFragmentCompat
     {
         private Eras currentera;
         private SettingsSaver saver;
@@ -26,7 +20,7 @@ namespace AndroidApp.Assets
             SetPreferencesFromResource(Resource.Xml.settingsprefs, rootKey);
             Preference common_era = FindPreference("common_era");
             Preference common_deletealldata = FindPreference("common_deletealldata");
-            common_era.PreferenceClick += Common_era_PreferenceClick; 
+            common_era.PreferenceClick += Common_era_PreferenceClick;
             common_deletealldata.PreferenceClick += Common_deletealldata_PreferenceClick;
             preference = common_era.SharedPreferences;
         }
@@ -74,7 +68,7 @@ namespace AndroidApp.Assets
         }
         private void HALDelete()
         {
-          
+
         }
     }
     public enum Eras

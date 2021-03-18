@@ -1,8 +1,7 @@
-﻿using System;
-
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
+using System;
 
 namespace AndroidApp.Assets
 {
@@ -61,7 +60,7 @@ namespace AndroidApp.Assets
                 if (Word.Length - 1 != i)
                 {
                     Word[i] = Word[i + 1];
-                   
+
                 }
                 else
                 {
@@ -73,8 +72,8 @@ namespace AndroidApp.Assets
         }
         public override int ItemCount => Word.Length;
 
-        void OnClick(Adapter1ClickEventArgs args) => ItemClick?.Invoke(this, args);
-        void OnLongClick(Adapter1ClickEventArgs args) => ItemLongClick?.Invoke(this, args);
+        private void OnClick(Adapter1ClickEventArgs args) => ItemClick?.Invoke(this, args);
+        private void OnLongClick(Adapter1ClickEventArgs args) => ItemLongClick?.Invoke(this, args);
 
     }
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
@@ -17,6 +11,13 @@ using AndroidX.DrawerLayout.Widget;
 using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.Navigation;
 using Microcharts.Droid;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace AndroidApp
@@ -28,15 +29,20 @@ namespace AndroidApp
         private DrawerLayout drawer;
         public LinearLayout maincontentlayout { private set; get; }
         private FloatingActionButton fab;
-        public DoublelineListStruct[] CurrentWordlist;
-        public List<GenreStruct> genres;
-
-        private List<string> Genredescriptions;
-        private List<string> Genretitles;
-
+        private BackButtonManager backbuttonManager = new BackButtonManager();
+        public ReadOnlyCollection<GenreStruct> LoadedGenreList
+        {
+            get
+            {
+                return genres.AsReadOnly();
+            }
+        }
+        private List<GenreStruct> genres;
+        private readonly List<DoublelineListStruct> genreinfos = new List<DoublelineListStruct>();
         private RemovalAdapter1 currentadapter;
         public int Genreid { private set; get; }
 
+        private List<string> GenreselectedList = new List<string>();
 
         public const string SAVEDATANAME = "content.json";
         public const string SCOREDATANAME = "score.json";
@@ -73,44 +79,37 @@ namespace AndroidApp
 
         public async Task CreateGenreList()
         {
-            if (Genretitles == null && Genredescriptions == null)
-            {
-                Genretitles = new List<string>();
-                Genredescriptions = new List<string>();
-            }
-            else
-            {
-                Genretitles.Clear();
-                Genredescriptions.Clear();
-            }
             genres.Clear();
+            genreinfos.Clear();
             string[] dirs = Directory.GetDirectories(GENREFOLDERDIR);
             TestResultStruct[][] results = await LoadScoreList(dirs);
             for (int i = 0; i < dirs.Length; i++)
             {
                 if (dirs[i].Contains(GenreFragment.TAG))
                 {
-                    string name = dirs[i].Remove(0, dirs[i].LastIndexOf("/") + 1).Replace(GenreFragment.TAG, string.Empty);
+                    List<string> genretitles = new List<string>();
+                    List<string> genredescs = new List<string>();
                     DateTime creationtime = Directory.GetCreationTime(Path.Combine(GENREFOLDERDIR, dirs[i]));
-                    Genretitles.Add(name);
-                    Genredescriptions.Add("作成日時：" + EraConverter.ConvertToCalendar(creationtime));
+                    DoublelineListStruct nameandcreatedate = new DoublelineListStruct();
+                    nameandcreatedate.Title = dirs[i].Remove(0, dirs[i].LastIndexOf("/") + 1).Replace(GenreFragment.TAG, string.Empty);
+                    nameandcreatedate.Description = "作成日時：" + EraConverter.ConvertToCalendar(creationtime);
+                    genreinfos.Add(nameandcreatedate);
                     string json = FileIO.ReadFile(Path.Combine(dirs[i], SAVEDATANAME));
                     if (!string.IsNullOrEmpty(json))
                     {
-                        GenreStruct genre = new GenreStruct(name, WordManager.DeserializeWordStructArray(json), results[i]);
+                        GenreStruct genre = new GenreStruct(genreinfos[i].Title, WordManager.DeserializeWordStructArray(json), results[i]);
                         genres.Add(genre);
                     }
                     else
                     {
-                        GenreStruct genre = new GenreStruct(name, new DoublelineListStruct[0], results[i]);
+                        GenreStruct genre = new GenreStruct(genreinfos[i].Title, new DoublelineListStruct[0], results[i]);
                         genres.Add(genre);
                     }
                 }
             }
-            Genretitles.Sort();
-            Genredescriptions.Sort();
+            genreinfos.Sort();
             genres.Sort();
-            RecyclerViewComponents.CreateDoublelineList(Genretitles.ToArray(), Genredescriptions.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
+            RecyclerViewComponents.CreateDoublelineList(genreinfos.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, OnClick_GenreList);
         }
 
         private async Task<TestResultStruct[][]> LoadScoreList(string[] dirnames)
@@ -155,21 +154,29 @@ namespace AndroidApp
             if (drawer.IsDrawerOpen(GravityCompat.Start))
             {
                 drawer.CloseDrawer(GravityCompat.Start);
+
             }
-            else if (Genreid != -1)
+            else
+            if (Genreid != -1 && backbuttonManager.GetCurrentID() == Resource.Id.nav_wordlist)
             {
-                RecyclerViewComponents.CreateDoublelineList(Genretitles.ToArray(), Genredescriptions.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, RecyclerView_OnClick);
+                RecyclerViewComponents.CreateDoublelineList(genreinfos.ToArray(), this, maincontentlayout, (a) => { ApplyChangetoGenreList(a.ToList()); }, OnClick_GenreList);
                 Genreid = -1;
-                CurrentWordlist = null;
-                RemovalAdapterCheck();
+                RemovalAdapterVisibleCheck();
+                return;
+            }
+            int previousid = backbuttonManager.GetProviousID();
+            if (previousid == Resource.Id.nav_wordlist && Genreid != -1)
+            {
+                CreateWordList(Genreid);
+                fab.Show();
             }
             else
             {
-                base.OnBackPressed();
+                NavigationItemSelected(previousid);
             }
         }
 
-        private void RemovalAdapterCheck()
+        private void RemovalAdapterVisibleCheck()
         {
             if (currentadapter != null)
             {
@@ -217,18 +224,24 @@ namespace AndroidApp
         public bool OnNavigationItemSelected(IMenuItem item)
         {
             int id = item.ItemId;
+            backbuttonManager.RecordScreenID(id);
+            return NavigationItemSelected(id);
+        }
 
+        private bool NavigationItemSelected(int id)
+        {
             if (id == Resource.Id.nav_wordlist)
             {
+                Genreid = -1;
                 maincontentlayout.RemoveAllViews();
                 CreateGenreList();
             }
 
             else if (id == Resource.Id.nav_quiz)
             {
-                if (CurrentWordlist != null)
+                if (Genreid != -1)
                 {
-                    if (CurrentWordlist.Length == 0)
+                    if (LoadedGenreList[Genreid].Words.Count == 0)
                     {
                         DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc), this);
                         return false;
@@ -237,7 +250,7 @@ namespace AndroidApp
                     {
                         maincontentlayout.RemoveAllViews();
                         View v = LayoutInflater.Inflate(Resource.Layout.quiz, maincontentlayout);
-                        RunOnUiThread(() => new QuizManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
+                        RunOnUiThread(() => new QuizManager(this, LoadedGenreList[Genreid].Words.ToArray(), v.FindViewById<EditText>(Resource.Id.quiz_answer),
                             v.FindViewById<TextView>(Resource.Id.quiz_question),
                             v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
                             v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu), true));
@@ -252,9 +265,9 @@ namespace AndroidApp
             }
             else if (id == Resource.Id.nav_test)
             {
-                if (CurrentWordlist != null)
+                if (Genreid != -1)
                 {
-                    if (CurrentWordlist.Length == 0)
+                    if (LoadedGenreList[Genreid].Words.Count == 0)
                     {
                         DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_nowords_title), Resources.GetString(Resource.String.dialog_nowords_desc), this);
                         return false;
@@ -263,7 +276,7 @@ namespace AndroidApp
                     {
                         maincontentlayout.RemoveAllViews();
                         View v = LayoutInflater.Inflate(Resource.Layout.quiz, maincontentlayout);
-                        RunOnUiThread(() => new TestManager(this, CurrentWordlist, v.FindViewById<EditText>(Resource.Id.quiz_answer),
+                        RunOnUiThread(() => new TestManager(this, LoadedGenreList[Genreid].Words.ToArray(), v.FindViewById<EditText>(Resource.Id.quiz_answer),
                             v.FindViewById<TextView>(Resource.Id.quiz_question),
                             v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
                             v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),
@@ -328,36 +341,36 @@ namespace AndroidApp
             drawer.CloseDrawer(GravityCompat.Start);
             if (Genreid != -1)
             {
-                GenreStruct g = new GenreStruct(genres[Genreid].GenreName, CurrentWordlist, genres[Genreid].Results);
-                genres[Genreid] = g;
-                //isloadedwords = false;
-                Genreid = -1;
-                RemovalAdapterCheck();
+                //GenreStruct g = new GenreStruct(genres[Genreid].GenreName, LoadedGenreList[Genreid].Words.ToArray(), genres[Genreid].Results);
+                //genres[Genreid] = g;
+                RemovalAdapterVisibleCheck();
             }
-            CurrentWordlist = null;
             return true;
         }
 
-
-        public void RecyclerView_OnClick(object sender, Adapter1ClickEventArgs e)
+        public void OnClick_GenreList(object sender, Adapter1ClickEventArgs e)
         {
             if (Genreid == -1)
             {
-                RemovalAdapter1 adapter1 = new RemovalAdapter1(genres[e.Position].Words.ToArray());
-                adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, e.Position); };
-                adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
-                adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
-                RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e.Position); });
-                CurrentWordlist = genres[e.Position].Words.ToArray();
-                Genreid = e.Position;
+                backbuttonManager.RecordScreenID(Resource.Id.nav_wordlist);
+                CreateWordList(e.Position);
             }
+        }
+
+        private void CreateWordList(int genreid)
+        {
+            RemovalAdapter1 adapter1 = new RemovalAdapter1(genres[genreid].Words.ToArray());
+            adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, genreid); };
+            adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
+            adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
+            RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, genreid); });           
+            Genreid = genreid;
         }
 
         public void ApplyChangetoWordList(DoublelineListStruct[] words, int index)
         {
             WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(genres[index].GenreName + GenreFragment.TAG, MainActivity.SAVEDATANAME)), words);
             genres[index].Words = words.ToList();
-            CurrentWordlist = genres[index].Words.ToArray();
         }
 
         private void ApplyChangetoGenreList(List<DoublelineListStruct> changedgenres)
@@ -367,8 +380,7 @@ namespace AndroidApp
                 if (!changedgenres.Exists(word => word.Title == genres[i].GenreName))
                 {
                     Directory.Delete(Path.Combine(GENREFOLDERDIR, genres[i].GenreName + GenreFragment.TAG), true);
-                    Genredescriptions.RemoveAt(i);
-                    Genretitles.Remove(genres[i].GenreName);
+                    genreinfos.RemoveAt(i);
                     genres.Remove(genres[i]);
                     break;
                 }
@@ -400,6 +412,11 @@ namespace AndroidApp
         public void SetTestResults(TestResultStruct[] result, int genreid)
         {
             genres[genreid].SetTestResult(result.ToList());
+        }
+
+        public void EditGenre(int genreid, GenreStruct newgenre)
+        {
+            genres[genreid] = newgenre;
         }
     }
 }

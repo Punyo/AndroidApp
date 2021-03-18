@@ -1,14 +1,12 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Android.App;
+﻿using Android.App;
 using Android.Util;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AndroidApp.Assets
 {
-
-
-    class FileIO
+    internal class FileIO
     {
         public static string ReadFile(string filePath)
         {
