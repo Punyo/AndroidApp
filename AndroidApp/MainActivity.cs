@@ -43,6 +43,7 @@ namespace AndroidApp
         public int Genreid { private set; get; }
 
         private List<string> GenreselectedList = new List<string>();
+        private NavigationView navigationView;
 
         public const string SAVEDATANAME = "content.json";
         public const string SCOREDATANAME = "score.json";
@@ -65,9 +66,8 @@ namespace AndroidApp
 
             toggle.SyncState();
 
-            NavigationView navigationView = FindViewById<NavigationView>(Resource.Id.nav_view);
+            navigationView = FindViewById<NavigationView>(Resource.Id.nav_view);
             navigationView.SetNavigationItemSelectedListener(this);
-            navigationView.Menu.GetItem(0).SetChecked(true);
 
             maincontentlayout = FindViewById<LinearLayout>(Resource.Id.main_content_Layout);
 
@@ -235,6 +235,7 @@ namespace AndroidApp
                 Genreid = -1;
                 maincontentlayout.RemoveAllViews();
                 CreateGenreList();
+                navigationView.Menu.GetItem(0).SetChecked(true);
             }
 
             else if (id == Resource.Id.nav_quiz)
@@ -254,6 +255,7 @@ namespace AndroidApp
                             v.FindViewById<TextView>(Resource.Id.quiz_question),
                             v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
                             v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu), true));
+                        navigationView.Menu.GetItem(1).SetChecked(true);
                     }
                 }
                 else
@@ -281,6 +283,7 @@ namespace AndroidApp
                             v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
                             v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),
                             WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName, Genreid));
+                        navigationView.Menu.GetItem(2).SetChecked(true);
                     }
                 }
                 else
@@ -311,6 +314,7 @@ namespace AndroidApp
                         RunOnUiThread(() => new ScoreAnalyticsManager(this, Resource.Id.scoreanalytics_recyclerView, v.FindViewById<TextView>(Resource.Id.scoreanalytics_title)
                             , v.FindViewById<ChartView>(Resource.Id.scoreanalytics_chartView)
                             , genres[Genreid].Results.ToArray()));
+                        navigationView.Menu.GetItem(3).SetChecked(true);
                     }
                 }
                 else
@@ -326,6 +330,7 @@ namespace AndroidApp
             {
                 maincontentlayout.RemoveAllViews();
                 SupportFragmentManager.BeginTransaction().Replace(Resource.Id.main_content_Layout, new SettingsFragment()).Commit();
+                navigationView.Menu.GetItem(4).SetChecked(true);
             }
 
             if (id == Resource.Id.nav_wordlist)
@@ -363,7 +368,7 @@ namespace AndroidApp
             adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, genreid); };
             adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
             adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
-            RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, genreid); });           
+            RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, genreid); });
             Genreid = genreid;
         }
 
