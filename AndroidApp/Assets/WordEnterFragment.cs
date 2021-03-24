@@ -1,21 +1,22 @@
-﻿using Android.App;
+﻿using System;
 using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using System;
-using System.Collections.Generic;
 using System.IO;
+using AndroidX.Fragment.App;
+using AndroidX.AppCompat.App;
+using Android.App;
 
 namespace AndroidApp.Assets
 {
     public class WordEnterFragment : AndroidX.Fragment.App.DialogFragment
     {
-        private readonly MainActivity activityinstance;
+        private MainActivity activityinstance;
         private EditText title_field;
         private EditText desc_field;
         private View view;
-        private readonly string name;
+        private string name;
 
         public WordEnterFragment(MainActivity activity, string genrename)
         {
@@ -48,16 +49,15 @@ namespace AndroidApp.Assets
             newword.Title = title_field.Text;
             newword.Description = desc_field.Text;
 
-            List<DoublelineListStruct> newwordlist = new List<DoublelineListStruct>();
-            newwordlist.AddRange(activityinstance.LoadedGenreList[activityinstance.Genreid].Words);
-            newwordlist.Add(newword);
-            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), newwordlist.ToArray());
+            Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
+            activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), activityinstance.CurrentWordlist);
 
-            GenreStruct g = new GenreStruct(activityinstance.LoadedGenreList[activityinstance.Genreid].GenreName, newwordlist.ToArray());
-            activityinstance.EditGenre(activityinstance.Genreid,g);
+            GenreStruct g = new GenreStruct(activityinstance.genres[activityinstance.Genreid].GenreName, activityinstance.CurrentWordlist);
+            activityinstance.genres[activityinstance.Genreid] = g;
 
-            RecyclerViewComponents.CreateDoublelineList(activityinstance.LoadedGenreList[activityinstance.Genreid].Words.ToArray(), activityinstance, activityinstance.maincontentlayout,
-                (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); }, activityinstance.OnClick_GenreList);
+            RecyclerViewComponents.CreateDoublelineList(activityinstance.CurrentWordlist, activityinstance, activityinstance.maincontentlayout,
+                (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); }, activityinstance.RecyclerView_OnClick);
         }
 
         public void Cancel(object s, DialogClickEventArgs args)

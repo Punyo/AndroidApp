@@ -1,14 +1,14 @@
-﻿using Android.Widget;
-using AndroidX.Fragment.App;
-using System;
+﻿using System;
+using Android.Widget;
 using System.IO;
+using AndroidX.Fragment.App;
 using Xamarin.Essentials;
 
 namespace AndroidApp.Assets
 {
-    internal class DevOption
+    class DevOption
     {
-        private readonly FragmentManager fragment;
+        private FragmentManager fragment;
         public static readonly Java.IO.File ZIPPATH = Platform.CurrentActivity.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments);
         public DevOption(Button jsonimport, Button jsonexport, FragmentManager transaction)
         {
@@ -19,7 +19,7 @@ namespace AndroidApp.Assets
 
         private void OpenExport(object sender, EventArgs e)
         {
-            System.IO.Compression.ZipFile.CreateFromDirectory(MainActivity.GENREFOLDERDIR, Path.Combine(ZIPPATH.AbsolutePath, $"SAVE({DateTime.Now.ToString().Replace("/", string.Empty)}).zip"));
+            System.IO.Compression.ZipFile.CreateFromDirectory(MainActivity.GENREFOLDERDIR, Path.Combine(ZIPPATH.AbsolutePath, $"SAVE({DateTime.Now.ToString().Replace("/",string.Empty)}).zip"));
         }
 
         private void OpenImport(object sender, EventArgs e)

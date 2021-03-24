@@ -1,11 +1,12 @@
-﻿using Android.App;
+﻿using System;
+
+using Android.App;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
-using System;
 
 namespace AndroidApp.Assets
 {
-    internal class RecyclerViewComponents
+    class RecyclerViewComponents
     {
         public static void CreateDoublelineList(DoublelineListStruct[] words, Activity activity, LinearLayout view, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null, EventHandler<Adapter1ClickEventArgs> clickevent = null)
         {
@@ -36,7 +37,7 @@ namespace AndroidApp.Assets
         }
 
         public static void CreateRemovalDoublelineList(RemovalAdapter1 adapter, Activity activity, LinearLayout maincontentlayout, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
-        {
+        {          
             maincontentlayout.RemoveAllViews();
             activity.LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);
             RecyclerView recyclerView = activity.FindViewById<RecyclerView>(Resource.Id.list_view);

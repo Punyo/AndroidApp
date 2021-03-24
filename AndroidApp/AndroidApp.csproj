@@ -75,7 +75,6 @@
     <Compile Include="Adapter1.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Assets\BackButtonManager.cs" />
     <Compile Include="Assets\DevOption.cs" />
     <Compile Include="Assets\DialogComponents.cs" />
     <Compile Include="Assets\EraConverter.cs" />

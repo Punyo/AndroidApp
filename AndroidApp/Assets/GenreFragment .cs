@@ -1,16 +1,18 @@
-﻿using Android.App;
+﻿using System.IO;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using System.IO;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 
 namespace AndroidApp.Assets
 {
     public class GenreFragment : AndroidX.Fragment.App.DialogFragment
     {
         private View view;
-        private readonly MainActivity main;
+        private MainActivity main;
         public const string TAG = "[GENRE]";
 
         public GenreFragment(MainActivity activity)

@@ -1,11 +1,12 @@
-﻿using Android.App;
+﻿using System;
+
 using Android.Views;
 using Android.Widget;
-using AndroidX.RecyclerView.Widget;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Xamarin.Essentials;
+using Android.App;
+using System.Collections.ObjectModel;
+using AndroidX.RecyclerView.Widget;
 
 namespace AndroidApp.Assets
 {
@@ -21,8 +22,8 @@ namespace AndroidApp.Assets
         public event OnRemoveMode OnRemoveModeExit;
         public event OnSelectedElementsChanged OnSelectChanged;
 
-        private readonly List<int> selectingelements;
-        private readonly List<RadioButton> selectingradios;
+        private List<int> selectingelements;
+        private List<RadioButton> selectingradios;
         public ReadOnlyCollection<int> SelectedElements
         {
             get
@@ -90,7 +91,7 @@ namespace AndroidApp.Assets
 
         public override int ItemCount => Word.Length;
 
-        private void OnClick(RemovalAdapterClickEventArgs args)
+        void OnClick(RemovalAdapterClickEventArgs args)
         {
             if (selectingelements.Count > 0)
             {
@@ -120,8 +121,7 @@ namespace AndroidApp.Assets
                 ItemClick?.Invoke(this, args);
             }
         }
-
-        private void OnLongClick(RemovalAdapterClickEventArgs args)
+        void OnLongClick(RemovalAdapterClickEventArgs args)
         {
             if (args.Radio.Checked == false)
             {
@@ -140,7 +140,7 @@ namespace AndroidApp.Assets
             }
             ItemLongClick?.Invoke(this, args);
         }
-
+   
         public void ExcuteRemove()
         {
             Activity main = Platform.CurrentActivity;

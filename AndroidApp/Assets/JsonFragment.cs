@@ -4,6 +4,8 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 using System.IO;
 using System.IO.Compression;
 using Xamarin.Essentials;
@@ -45,7 +47,7 @@ namespace AndroidApp.Assets
                 ZipFile.ExtractToDirectory(text.Text, MainActivity.GENREFOLDERDIR);
                 if (Directory.Exists(Path.Combine(MainActivity.GENREFOLDERDIR, ".__override__")))
                 {
-                    Directory.Delete(Path.Combine(MainActivity.GENREFOLDERDIR, ".__override__"), true);
+                    Directory.Delete(Path.Combine(MainActivity.GENREFOLDERDIR, ".__override__"),true);
                 }
             }
             catch (System.Exception e)

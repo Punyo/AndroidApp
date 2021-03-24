@@ -1,11 +1,11 @@
-﻿using Android.Content;
+﻿using System.IO;
+using System.Text.Json;
 using System;
+
+using Android.Content;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
-
 public enum WordLoadMode
 {
     External,
@@ -55,13 +55,12 @@ namespace AndroidApp.Assets
     }
 
     [System.Serializable]
-    public struct DoublelineListStruct : IComparable
+    public struct DoublelineListStruct
     {
         //上段に表示
         public string Title { get; set; }
         //下段に表示
         public string Description { get; set; }
-
         public static bool operator ==(DoublelineListStruct a, DoublelineListStruct b)
         {
             if (a.Title == b.Description && a.Description == b.Description)
@@ -86,12 +85,6 @@ namespace AndroidApp.Assets
         {
             return base.GetHashCode();
         }
-
-        public int CompareTo(object obj)
-        {
-            DoublelineListStruct list = (DoublelineListStruct)obj;
-            return Title.CompareTo(list.Title);
-        }
     }
 
     public class GenreStruct : IComparable<GenreStruct>
@@ -110,20 +103,7 @@ namespace AndroidApp.Assets
                 return new ReadOnlyCollection<TestResultStruct>(res.AsReadOnly());
             }
         }
-        public ReadOnlyCollection<DoublelineListStruct> Genreinfos
-        {
-            get
-            {
-                if (res != null)
-                {
-                    return info.AsReadOnly();
-                }
-                res = new List<TestResultStruct>();
-                return new ReadOnlyCollection<DoublelineListStruct>(info.AsReadOnly());
-            }
-        }
         private List<TestResultStruct> res;
-        private readonly List<DoublelineListStruct> info;
 
         public GenreStruct(string name, IEnumerable<DoublelineListStruct> words, IEnumerable<TestResultStruct> results = null)
         {
@@ -137,7 +117,7 @@ namespace AndroidApp.Assets
 
         public void SetTestResult(List<TestResultStruct> result)
         {
-            res = result;
+            res = (List<TestResultStruct>)result;
         }
         public int CompareTo(GenreStruct other)
         {
