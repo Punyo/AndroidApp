@@ -8,7 +8,7 @@
   <string name="dialog_ok">OK</string>
   <string name="dialog_cancel">キャンセル</string>
   <string name="dialog_deleteelements">[SELECTINGELEMENTSCOUNT]個の要素を削除します。よろしいですか？</string>
-  <string name="dialog_deletealldata">全ての単語と設定のデータを削除します。よろしいですか?\n削除後アプリを終了します。</string>
+  <string name="dialog_deletealldata">全ての単語と設定のデータを削除します。よろしいですか？&#xA;削除後アプリを終了します。</string>
   <string name="dialog_delele">削除</string>
   <string name="dialog_notselect_title">項目未選択</string>
   <string name="dialog_deletealldata_title">全データ削除</string>
