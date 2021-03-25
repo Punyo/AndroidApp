@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/howtouse_cardView1"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="4dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout1">
+            <CheckBox
+                android:text="CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:id="@+id/howtouse_checkBox1"
+                android:button="@drawable/expandablelistview_indicator"
+                android:textSize="30sp"
+                android:onClick="OnClick_CardView" />
+            <TextView
+                android:text="ああああああああああああああああああああああああああああああああああ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howtouse_body1"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

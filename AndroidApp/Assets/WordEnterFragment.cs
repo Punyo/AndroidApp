@@ -49,14 +49,14 @@ namespace AndroidApp.Assets
             newword.Title = title_field.Text;
             newword.Description = desc_field.Text;
 
-            Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
-            activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
-            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), activityinstance.CurrentWordlist);
+            //Array.Resize(ref activityinstance.CurrentWordlist, activityinstance.CurrentWordlist.Length + 1);
+            //activityinstance.CurrentWordlist[activityinstance.CurrentWordlist.Length - 1] = newword;
+            GenreStruct newgenre = activityinstance.Genrelist[activityinstance.Genreid];
+            newgenre.Words.Add(newword);
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(name + GenreFragment.TAG, MainActivity.SAVEDATANAME)), newgenre.Words.ToArray());
+            activityinstance.EditGenre(activityinstance.Genreid, newgenre);
 
-            GenreStruct g = new GenreStruct(activityinstance.genres[activityinstance.Genreid].GenreName, activityinstance.CurrentWordlist);
-            activityinstance.genres[activityinstance.Genreid] = g;
-
-            RecyclerViewComponents.CreateDoublelineList(activityinstance.CurrentWordlist, activityinstance, activityinstance.maincontentlayout,
+            RecyclerViewComponents.CreateDoublelineList(newgenre.Words.ToArray(), activityinstance, activityinstance.maincontentlayout,
                 (words) => { activityinstance.ApplyChangetoWordList(words, activityinstance.Genreid); }, activityinstance.RecyclerView_OnClick);
         }
 

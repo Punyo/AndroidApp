@@ -55,12 +55,17 @@ namespace AndroidApp.Assets
     }
 
     [System.Serializable]
-    public struct DoublelineListStruct
+    public struct DoublelineListStruct : IComparable<DoublelineListStruct>
     {
         //上段に表示
         public string Title { get; set; }
         //下段に表示
         public string Description { get; set; }
+        public DoublelineListStruct(string title, string description)
+        {
+            Title = title;
+            Description = description;
+        }
         public static bool operator ==(DoublelineListStruct a, DoublelineListStruct b)
         {
             if (a.Title == b.Description && a.Description == b.Description)
@@ -84,6 +89,11 @@ namespace AndroidApp.Assets
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public int CompareTo(DoublelineListStruct other)
+        {
+            return Title.CompareTo(other.Title);
         }
     }
 
