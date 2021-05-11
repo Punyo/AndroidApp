@@ -1,6 +1,14 @@
 ﻿using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
 using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.Snackbar;
+using System;
+using Xamarin.Essentials;
+using static Android.Views.View;
+using static AndroidApp.Assets.RecyclerViewItemSwiper;
 
 namespace AndroidApp.Assets
 {
@@ -52,7 +60,7 @@ namespace AndroidApp.Assets
             }
             return base.GetDragDirs(recyclerView, viewHolder);
         }
-        
+
         public override void OnChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, bool isCurrentlyActive)
         {
             DrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -76,18 +84,42 @@ namespace AndroidApp.Assets
 
         private void Swiped(RecyclerView.ViewHolder viewHolder)
         {
+            int indexbackup = viewHolder.AdapterPosition;
             if (removaladapter == null)
             {
-                //if (removaladapter.SelectedElements.Count == 0)
-                //{
-                    viewadapter.RemoveAt(viewHolder.AdapterPosition);
-                    OnSwipe?.Invoke(viewadapter.Word);
-                //}
+                DoublelineListStruct backup = viewadapter.Word[viewHolder.AdapterPosition];
+                viewadapter.RemoveAt(viewHolder.AdapterPosition);
+                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, "Test", Snackbar.LengthLong);
+                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(viewadapter.Word); }));
+                s.SetAction("削除を取り消す", (v) => { viewadapter.Insert(indexbackup, backup); });
+                s.Show();
             }
             else
             {
+                DoublelineListStruct backup = removaladapter.Word[viewHolder.AdapterPosition];           
                 removaladapter.RemoveAt(viewHolder.AdapterPosition);
-                OnSwipe?.Invoke(removaladapter.Word);
+                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, "Test", Snackbar.LengthLong);
+                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(removaladapter.Word); }));
+                s.SetAction("削除を取り消す", (v) => { removaladapter.Insert(indexbackup, backup); });
+                s.Show();
+            }
+        }
+
+        private class SnackBarCallBack : BaseTransientBottomBar.BaseCallback
+        {
+            public delegate void OnDissmissedEvent();
+            private event OnDissmissedEvent OnDissmissed_Event;
+            public SnackBarCallBack(OnDissmissedEvent e = null)
+            {
+                if (e != null)
+                {
+                    OnDissmissed_Event += e;
+                }
+            }
+            public override void OnDismissed(Java.Lang.Object transientBottomBar, int e)
+            {
+                base.OnDismissed(transientBottomBar, e);
+                OnDissmissed_Event?.Invoke();
             }
         }
     }

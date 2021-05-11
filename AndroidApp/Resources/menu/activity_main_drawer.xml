@@ -20,14 +20,14 @@
   android:id="@+id/nav_share"
   android:icon="@drawable/baseline_timeline_24"
   android:title="統計" />
-    <!--<item
-        android:id="@+id/nav_devoption"
-        android:icon="@drawable/baseline_developer_mode_black_48"
-        android:title="Tools" />-->
     <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_menu_send"
+        android:icon="@drawable/ic_menu_manage"
         android:title="設定" />
+    <item
+        android:id="@+id/nav_howtouse"
+        android:icon="@drawable/ic_menu_send"
+        android:title="取扱説明書" />
 
   </group>
 </menu>

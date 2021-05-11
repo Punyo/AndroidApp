@@ -67,24 +67,64 @@ namespace AndroidApp.Assets
 
         public virtual void CheckAnswer(object sender, EventArgs e)
         {
-            if (textfield.Text.Replace(" ", "") == wordlist[currentquestionindex].Description)
+            if (!wordlist[currentquestionindex].Description.Contains("・"))
             {
-                marubatsu.SetImageResource(Resource.Drawable.maru);
-                CorrectCount++;
-                OnCorrect?.Invoke(currentquestionindex, QuestionResult.Correct);
-                if (!Preferences.Get("test_and _quiz_enableanim", true))
+                if (textfield.Text.Replace(" ", "") == wordlist[currentquestionindex].Description)
                 {
-                    questiontext.Text = "正解";
+                    Correct();
+                }
+                else
+                {
+                    Miss();
                 }
             }
             else
             {
-                marubatsu.SetImageResource(Resource.Drawable.batsu);
-                questiontext.Text = wordlist[currentquestionindex].Description;
-                questiontext.SetTextColor(Android.Graphics.Color.Red);
-                OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
-            }
+                string[] ansarray = wordlist[currentquestionindex].Description.Split("・");
+                string[] player_ans = textfield.Text.Split("・");
+                Array.Sort(ansarray);
+                Array.Sort(player_ans);
+                foreach (var item in ansarray)
+                {
+                    if (Array.BinarySearch(player_ans, item) < 0)
+                    {
+                        Miss();
+                        End();
+                        return;
+                    }
+                }
+                foreach (var item in player_ans)
+                {
+                    if (Array.BinarySearch(ansarray, item) < 0)
+                    {
+                        Miss();
+                        End();
+                        return;
+                    }
+                }
+                Correct();
+            }       
+            End();
+        }
 
+        private void Correct()
+        {
+            CorrectCount++;
+            OnCorrect?.Invoke(currentquestionindex, QuestionResult.Correct);
+            if (!Preferences.Get("test_and _quiz_enableanim", true))
+            {
+
+                questiontext.Text = "正解";
+                AnimationEnd(null, null);
+            }
+            else
+            {
+                marubatsu.SetImageResource(Resource.Drawable.maru);
+            }
+        }
+
+        private void End()
+        {
             if (Preferences.Get("test_and _quiz_enableanim", true))
             {
                 marubatsu.StartAnimation(animation);
@@ -93,6 +133,21 @@ namespace AndroidApp.Assets
             button.Text = currentactivity.GetString(Resource.String.quiz_next);
             button.Click -= CheckAnswer;
             button.Click += NextQuestion;
+        }
+
+        private void Miss()
+        {
+            questiontext.Text = wordlist[currentquestionindex].Description;
+            questiontext.SetTextColor(Android.Graphics.Color.Red);
+            OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
+            if (!Preferences.Get("test_and _quiz_enableanim", true))
+            {
+                AnimationEnd(null, null);
+            }
+            else
+            {
+                marubatsu.SetImageResource(Resource.Drawable.batsu);
+            }
         }
 
         public void NextQuestion(object sender, EventArgs e)

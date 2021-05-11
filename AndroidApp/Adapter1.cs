@@ -61,13 +61,28 @@ namespace AndroidApp.Assets
                 if (Word.Length - 1 != i)
                 {
                     Word[i] = Word[i + 1];
-                   
+
                 }
                 else
                 {
                     Array.Resize(ref Word, Word.Length - 1);
                 }
             }
+            this.NotifyItemRemoved(index);
+            this.NotifyItemRangeChanged(index, Word.Length);
+        }
+        public void Insert(int index, DoublelineListStruct item)
+        {
+            for (int i = index; i < Word.Length; i++)
+            {
+                if (Word.Length - 1 != i)
+                {
+                    Word[i] = Word[i - 1];
+
+                }
+            }
+            Array.Resize(ref Word, Word.Length + 1);
+            Word[index] = item;
             this.NotifyItemRemoved(index);
             this.NotifyItemRangeChanged(index, Word.Length);
         }

@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:id="@+id/linearLayout1">
             <CheckBox
-                android:text="CheckBox"
+                android:text="@string/howtouse_title1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minWidth="25px"
@@ -29,14 +29,149 @@
                 android:id="@+id/howtouse_checkBox1"
                 android:button="@drawable/expandablelistview_indicator"
                 android:textSize="30sp"
-                android:onClick="OnClick_CardView" />
+                />
             <TextView
-                android:text="ああああああああああああああああああああああああああああああああああ"
+                android:text="@string/howtouse_body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/howtouse_body1"
                 android:textSize="15sp" />
         </LinearLayout>
 
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/howtouse_cardView2"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="4dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout2">
+            <CheckBox
+                android:text="@string/howtouse_title2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:id="@+id/howtouse_checkBox2"
+                android:button="@drawable/expandablelistview_indicator"
+                android:textSize="30sp"
+                />
+            <TextView
+                android:text="@string/howtouse_body2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howtouse_body2"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/howtouse_cardView3"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="4dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout3">
+            <CheckBox
+                android:text="@string/howtouse_title3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:id="@+id/howtouse_checkBox3"
+                android:button="@drawable/expandablelistview_indicator"
+                android:textSize="30sp"
+                />
+            <TextView
+                android:text="@string/howtouse_body3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howtouse_body3"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/howtouse_cardView4"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="4dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout4">
+            <CheckBox
+                android:text="@string/howtouse_title4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:id="@+id/howtouse_checkBox4"
+                android:button="@drawable/expandablelistview_indicator"
+                android:textSize="30sp"
+                />
+            <TextView
+                android:text="@string/howtouse_body4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howtouse_body4"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/howtouse_cardView5"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="4dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout5">
+            <CheckBox
+                android:text="@string/howtouse_title5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:id="@+id/howtouse_checkBox5"
+                android:button="@drawable/expandablelistview_indicator"
+                android:textSize="30sp"
+                />
+            <TextView
+                android:text="@string/howtouse_body5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/howtouse_body5"
+                android:textSize="15sp" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -15,6 +15,7 @@ namespace AndroidApp.Assets
         private TextView title;
         private Activity a;
         private int id;
+        private const int maxresults = 10;
         public ScoreAnalyticsManager(Activity activity, int recyclerviewid, TextView titletext, ChartView chart, TestResultStruct[] results)
         {
             linechart = new LineChart();
@@ -28,7 +29,18 @@ namespace AndroidApp.Assets
             }
             else
             {
-                ShowResults(results);
+                if (results.Length > maxresults)
+                {
+                    TestResultStruct[] newresults = new TestResultStruct[maxresults];
+                    for (int i = results.Length - maxresults; i < results.Length; i++)
+                    {
+                        newresults[i-(results.Length - maxresults)] = results[i];
+                    }
+                }
+                else
+                {
+                    ShowResults(results);
+                }              
             }
         }
         private void ShowResults(TestResultStruct[] testresults)

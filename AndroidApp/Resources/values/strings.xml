@@ -21,4 +21,18 @@
   <string name="quiz_checkanswer">答え合わせ</string>
   <string name="quiz_next">次の問題</string>
   <string name="devoption_import">インポート</string>
+  <string name="howtouse_title1">1:起動したら画面が真っ白なんだけど...</string>
+  <string name="howtouse_body1">単語を登録するには、まず右下の[+]ボタンを押し単語帳の項目を追加した後に登録した項目を押してもう一度[+]ボタンを押すことで登録できます。</string>  
+  <string name="howtouse_title2">2:項目/単語を消したい</string>
+  <string name="howtouse_body2">項目/単語を左から右へスワイプすることで削除できます。単語は長押しすることで複数同時削除できます。</string>
+  <string name="howtouse_title3">3:</string>
+  <string name="howtouse_body3">仮置き</string>  
+  <string name="howtouse_title4">4:</string>
+  <string name="howtouse_body4">仮置き</string> 
+  <string name="howtouse_title5">仮置き</string>
+  <string name="howtouse_body5">仮置き</string> 
+  <string name="howtouse_title6">6:文章書くの疲れたもおおおおおおおおおおおおぉん</string>
+  <string name="howtouse_body6">こんな糞アプリでも使ってくれてありがとううううううううううううううううううう！</string> 
+  <string name="howtouse_title7">仮置き</string>
+  <string name="howtouse_body7">(こんなアプリを解析するもの好きっているのか.....?)</string>
 </resources>

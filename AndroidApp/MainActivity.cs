@@ -286,12 +286,12 @@ namespace AndroidApp
                     return false;
                 }
             }
-            //else if (id == Resource.Id.nav_devoption)
-            //{
-            //    maincontentlayout.RemoveAllViews();
-            //    View v = LayoutInflater.Inflate(Resource.Layout.devoption, maincontentlayout);
-            //    new DevOption(v.FindViewById<Button>(Resource.Id.button_jsonimport), v.FindViewById<Button>(Resource.Id.button_jsonexport), SupportFragmentManager);
-            //}
+            else if (id == Resource.Id.nav_howtouse)
+            {
+                maincontentlayout.RemoveAllViews();
+                View v = LayoutInflater.Inflate(Resource.Layout.howtouse, maincontentlayout);               
+                new Howtouse();
+            }
             else if (id == Resource.Id.nav_share)
             {
                 if (Genreid != -1)
@@ -315,9 +315,6 @@ namespace AndroidApp
                     DialogComponents.ShowWarning(Resources.GetString(Resource.String.dialog_notselect_title), Resources.GetString(Resource.String.dialog_notselect_desc), this);
                     return false;
                 }
-
-
-
             }
             else if (id == Resource.Id.nav_settings)
             {

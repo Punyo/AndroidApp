@@ -81,6 +81,7 @@
     <Compile Include="Assets\EraConverter.cs" />
     <Compile Include="Assets\FileIO.cs" />
     <Compile Include="Assets\GenreFragment .cs" />
+    <Compile Include="Assets\Howtouse.cs" />
     <Compile Include="Assets\JsonFragment.cs" />
     <Compile Include="Assets\QuizManager.cs" />
     <Compile Include="Assets\RecyclerViewComponents.cs" />
@@ -373,6 +374,12 @@
     <AndroidResource Include="Resources\values\arrays.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\howtouse.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\expandablelistview_indicator.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="BeforeBuild">
