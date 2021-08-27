@@ -31,8 +31,10 @@
   <string name="howtouse_body4">仮置き</string> 
   <string name="howtouse_title5">仮置き</string>
   <string name="howtouse_body5">仮置き</string> 
-  <string name="howtouse_title6">6:文章書くの疲れたもおおおおおおおおおおおおぉん</string>
-  <string name="howtouse_body6">こんな糞アプリでも使ってくれてありがとううううううううううううううううううう！</string> 
   <string name="howtouse_title7">仮置き</string>
-  <string name="howtouse_body7">(こんなアプリを解析するもの好きっているのか.....?)</string>
+  <string name="test_prompt_title">"出題モード選択"</string>
+  <string-array name="test_prompt_options">
+    <item>"登録順に出題"</item>
+    <item>"ランダムに出題"</item>
+  </string-array>
 </resources>

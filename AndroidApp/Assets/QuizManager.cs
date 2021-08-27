@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Views.Animations;
 using Android.Widget;
@@ -10,7 +11,8 @@ namespace AndroidApp.Assets
     class QuizManager
     {
         public readonly Activity currentactivity;
-        private DoublelineListStruct[] wordlist;
+        private List<DoublelineListStruct> wordlist;
+        private List<uint> priorities;
         private int currentquestionindex;
         public readonly TextView questiontext;
         public readonly Button button;
@@ -18,21 +20,17 @@ namespace AndroidApp.Assets
         private Animation animation;
         public readonly EditText textfield;
 
-        public delegate void QuestionInfo(int index, QuestionResult result);
-        public event QuestionInfo OnCorrect;
-        public event QuestionInfo OnMiss;
-        public int CorrectCount { private set; get; }
-
         public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, bool faststart)
         {
             currentactivity = activity;
-            wordlist = words;
+            wordlist = words.ToList();
             questiontext = question;
             textfield = edit;
             button = answerbutton;
             animation = AnimationUtils.LoadAnimation(activity, Resource.Animation.marubatsuanim);
             animation.AnimationEnd += AnimationEnd;
             marubatsu = image;
+            priorities = new List<uint>(words.Length);
             if (faststart)
             {
                 GiveQuestion();
@@ -53,7 +51,7 @@ namespace AndroidApp.Assets
         public virtual void GiveQuestion()
         {
             Random r = new Random();
-            currentquestionindex = r.Next(0, wordlist.Length);
+            currentquestionindex = r.Next(0, wordlist.Count);
             questiontext.Text = wordlist[currentquestionindex].Title;
             button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
         }
@@ -103,17 +101,15 @@ namespace AndroidApp.Assets
                     }
                 }
                 Correct();
-            }       
+            }
             End();
         }
 
         private void Correct()
         {
-            CorrectCount++;
-            OnCorrect?.Invoke(currentquestionindex, QuestionResult.Correct);
+
             if (!Preferences.Get("test_and _quiz_enableanim", true))
             {
-
                 questiontext.Text = "正解";
                 AnimationEnd(null, null);
             }
@@ -139,7 +135,7 @@ namespace AndroidApp.Assets
         {
             questiontext.Text = wordlist[currentquestionindex].Description;
             questiontext.SetTextColor(Android.Graphics.Color.Red);
-            OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
+            //OnMiss?.Invoke(currentquestionindex, QuestionResult.Miss);
             if (!Preferences.Get("test_and _quiz_enableanim", true))
             {
                 AnimationEnd(null, null);
@@ -159,20 +155,17 @@ namespace AndroidApp.Assets
             textfield.Text = string.Empty;
         }
 
-        public DoublelineListStruct[] GetWordList()
+        private void IncreasePriority(int questionindex)
         {
-            return wordlist;
+            if (priorities[questionindex] <= 4)
+            {
+                priorities[questionindex]++;
+            }
         }
 
-        public void ResetCorrectCount()
+        private void DecreasePriority(int questionindex)
         {
-            CorrectCount = 0;
+            priorities[questionindex]--;
         }
-    }
-    [Serializable]
-    public enum QuestionResult
-    {
-        Correct,
-        Miss
     }
 }

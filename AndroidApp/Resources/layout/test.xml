@@ -1,0 +1,54 @@
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:id="@+id/relativeLayout1">
+    <TextView
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/test_question"
+        android:textAlignment="gravity"
+        android:gravity="center" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="36.0dp"
+        android:layout_marginBottom="130dp"
+        android:id="@+id/test_spinner"
+        android:layout_alignParentBottom="true"
+        android:spinnerMode="dropdown"
+        android:prompt="@string/test_prompt_title" />
+    <TextView
+        android:text="意味"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="115dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/test_answer"
+        android:hint="現代日本語での意味...."
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:inputType="text"
+        android:singleLine="true" />
+    <Button
+        android:text="@string/quiz_checkanswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/test_checkanewer"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true" />
+    <ImageView
+        android:src="@drawable/empty"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/test_marubatsu"
+       />
+</RelativeLayout >

@@ -26,9 +26,38 @@ namespace AndroidApp.Assets
             SetPreferencesFromResource(Resource.Xml.settingsprefs, rootKey);
             Preference common_era = FindPreference("common_era");
             Preference common_deletealldata = FindPreference("common_deletealldata");
-            common_era.PreferenceClick += Common_era_PreferenceClick; 
+            FindPreference("debug_dump").PreferenceClick += Dump_PreferenceClick;
+            common_era.PreferenceClick += Common_era_PreferenceClick;
             common_deletealldata.PreferenceClick += Common_deletealldata_PreferenceClick;
             preference = common_era.SharedPreferences;
+
+        }
+
+        private void Dump_PreferenceClick(object sender, Preference.PreferenceClickEventArgs e)
+        {
+            string[] dirs = Directory.GetDirectories(MainActivity.GENREFOLDERDIR);
+            Array.ForEach(dirs, (a) =>
+               {
+                   if (!a.Contains(GenreFragment.TAG))
+                   {
+                       a = string.Empty;
+                   }
+               });
+            foreach (var item in dirs)
+            {
+                string dirpath = Path.Combine(Context.GetExternalFilesDir(Android.OS.Environment.DirectoryNotifications).AbsolutePath, "Backups");
+                Directory.CreateDirectory(dirpath);
+                if (item != string.Empty)
+                {
+                    string newdir = item.Replace(MainActivity.GENREFOLDERDIR, dirpath);
+                    Directory.CreateDirectory(newdir);
+                    FileInfo[] files = new DirectoryInfo(item).GetFiles();
+                    foreach (var it in files)
+                    {
+                        File.Copy(it.FullName,Path.Combine(newdir,it.Name),true);
+                    }
+                }
+            }
         }
 
         private void Common_deletealldata_PreferenceClick(object sender, Preference.PreferenceClickEventArgs e)
@@ -74,7 +103,7 @@ namespace AndroidApp.Assets
         }
         private void HALDelete()
         {
-          
+
         }
     }
     public enum Eras

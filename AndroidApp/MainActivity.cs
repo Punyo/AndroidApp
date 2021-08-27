@@ -272,11 +272,12 @@ namespace AndroidApp
                     else
                     {
                         maincontentlayout.RemoveAllViews();
-                        View v = LayoutInflater.Inflate(Resource.Layout.quiz, maincontentlayout);
-                        RunOnUiThread(() => new TestManager(this, genres[Genreid].Words.ToArray(), v.FindViewById<EditText>(Resource.Id.quiz_answer),
-                            v.FindViewById<TextView>(Resource.Id.quiz_question),
-                            v.FindViewById<Button>(Resource.Id.quiz_checkanewer),
-                            v.FindViewById<ImageView>(Resource.Id.quiz_marubatsu),
+                        View v = LayoutInflater.Inflate(Resource.Layout.test, maincontentlayout);
+                        RunOnUiThread(() => new TestManager(this, genres[Genreid].Words.ToArray(), v.FindViewById<EditText>(Resource.Id.test_answer),
+                            v.FindViewById<TextView>(Resource.Id.test_question),
+                            v.FindViewById<Button>(Resource.Id.test_checkanewer),
+                            v.FindViewById<Spinner>(Resource.Id.test_spinner),
+                            v.FindViewById<ImageView>(Resource.Id.test_marubatsu),
                             WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName, Genreid));
                     }
                 }
@@ -289,7 +290,7 @@ namespace AndroidApp
             else if (id == Resource.Id.nav_howtouse)
             {
                 maincontentlayout.RemoveAllViews();
-                View v = LayoutInflater.Inflate(Resource.Layout.howtouse, maincontentlayout);               
+                View v = LayoutInflater.Inflate(Resource.Layout.howtouse, maincontentlayout);
                 new Howtouse();
             }
             else if (id == Resource.Id.nav_share)
