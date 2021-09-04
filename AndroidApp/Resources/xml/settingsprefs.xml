@@ -10,8 +10,7 @@
     <SwitchPreferenceCompat
         app:key="test_and _quiz_enableanim"
         app:defaultValue="true"
-        app:title="〇×アニメーションの有効/無効"/>
-
+        app:title="アニメーションの有効/無効"/>  
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -35,11 +34,6 @@
            app:key="debug_dump"
            app:summary="暦の表示法を設定します。"
            app:title="ジャンルデータを外部ストレージにコピー"/>
-    <Preference
-           app:key="debug_writetestdata"
-           app:summary="単語、統計、設定データなどをすべて削除します。"
-           app:title="全データ削除"/>
-
   </PreferenceCategory>
 
 </PreferenceScreen>

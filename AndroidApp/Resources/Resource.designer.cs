@@ -10648,10 +10648,7 @@ namespace AndroidApp
 			public const int settingsprefs = 2131886080;
 			
 			// aapt resource value: 0x7F120001
-			public const int testmodedropdown = 2131886081;
-			
-			// aapt resource value: 0x7F120002
-			public const int xamarin_essentials_fileprovider_file_paths = 2131886082;
+			public const int xamarin_essentials_fileprovider_file_paths = 2131886081;
 			
 			static Xml()
 			{

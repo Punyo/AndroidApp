@@ -12,12 +12,15 @@ namespace AndroidApp.Assets
     {
         public readonly Activity currentactivity;
         private List<DoublelineListStruct> wordlist;
-        private List<uint> priorities;
+        private int[] priorities;
         private int currentquestionindex;
         public readonly TextView questiontext;
         public readonly Button button;
+        private readonly int maxpriority = 3;
+        private readonly int minpriority = -3;
         private ImageView marubatsu;
         private Animation animation;
+        private Random random;
         public readonly EditText textfield;
 
         public QuizManager(Activity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, bool faststart)
@@ -30,7 +33,8 @@ namespace AndroidApp.Assets
             animation = AnimationUtils.LoadAnimation(activity, Resource.Animation.marubatsuanim);
             animation.AnimationEnd += AnimationEnd;
             marubatsu = image;
-            priorities = new List<uint>(words.Length);
+            priorities = new int[words.Length];
+            random = new Random();
             if (faststart)
             {
                 GiveQuestion();
@@ -50,15 +54,11 @@ namespace AndroidApp.Assets
 
         public virtual void GiveQuestion()
         {
-            Random r = new Random();
-            currentquestionindex = r.Next(0, wordlist.Count);
-            questiontext.Text = wordlist[currentquestionindex].Title;
-            button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
-        }
-
-        public virtual void GiveQuestion(int questionindex)
-        {
-            currentquestionindex = questionindex;
+            currentquestionindex = random.Next(0, wordlist.Count);
+            if (random.Next(0, (maxpriority - priorities[currentquestionindex]) * 2) != 0)
+            {
+                GiveQuestion();
+            }
             questiontext.Text = wordlist[currentquestionindex].Title;
             button.Text = currentactivity.GetString(Resource.String.quiz_checkanswer);
         }
@@ -117,6 +117,7 @@ namespace AndroidApp.Assets
             {
                 marubatsu.SetImageResource(Resource.Drawable.maru);
             }
+            DecreasePriority(currentquestionindex);
         }
 
         private void End()
@@ -144,6 +145,7 @@ namespace AndroidApp.Assets
             {
                 marubatsu.SetImageResource(Resource.Drawable.batsu);
             }
+            IncreasePriority(currentquestionindex);
         }
 
         public void NextQuestion(object sender, EventArgs e)
@@ -157,7 +159,8 @@ namespace AndroidApp.Assets
 
         private void IncreasePriority(int questionindex)
         {
-            if (priorities[questionindex] <= 4)
+
+            if (priorities[questionindex] < maxpriority)
             {
                 priorities[questionindex]++;
             }
@@ -165,7 +168,10 @@ namespace AndroidApp.Assets
 
         private void DecreasePriority(int questionindex)
         {
-            priorities[questionindex]--;
+            if (priorities[questionindex] > minpriority)
+            {
+                priorities[questionindex]--;
+            }
         }
     }
 }

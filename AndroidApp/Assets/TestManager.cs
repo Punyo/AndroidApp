@@ -281,7 +281,6 @@ namespace AndroidApp.Assets
             {
                 marubatsu.StartAnimation(animation);
             }
-
             button.Text = mainactivity.GetString(Resource.String.quiz_next);
             button.Click -= CheckAnswer;
             button.Click += Button_Click;
