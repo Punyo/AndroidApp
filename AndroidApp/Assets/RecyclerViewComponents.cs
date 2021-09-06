@@ -36,7 +36,7 @@ namespace AndroidApp.Assets
             SetEvents(clickevent, adapter);
         }
 
-        public static void CreateRemovalDoublelineList(RemovalAdapter1 adapter, Activity activity, LinearLayout maincontentlayout, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
+        public static void CreateCustomAdapterDoublelineList(SimpleAdapter adapter, Activity activity, LinearLayout maincontentlayout, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {          
             maincontentlayout.RemoveAllViews();
             activity.LayoutInflater.Inflate(Resource.Layout.recycler_view, maincontentlayout);

@@ -209,7 +209,7 @@ namespace AndroidApp
         {
             if (Genreid != -1)
             {
-                WordEnterFragment word = new WordEnterFragment(this, genres[Genreid].GenreName);
+                DoubleTextBoxFragment word = new DoubleTextBoxFragment(RegisiterWord);
                 word.Show(SupportFragmentManager.BeginTransaction(), "register");
             }
             else
@@ -360,11 +360,12 @@ namespace AndroidApp
 
         private void CreateWordlist(int e)
         {
-            RemovalAdapter1 adapter1 = new RemovalAdapter1(genres[e].Words.ToArray());
-            adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, e); };
-            adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
-            adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
-            RecyclerViewComponents.CreateRemovalDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e); });
+            //RemovalAdapter1 adapter1 = new RemovalAdapter1(genres[e].Words.ToArray());
+            //adapter1.OnRemoveExcuted += (words) => { toolbar.Menu.Clear(); ApplyChangetoWordList(words, e); };
+            //adapter1.OnRemoveModeEnter += () => { toolbar.InflateMenu(Resource.Menu.menu_deleteword); currentadapter = adapter1; };
+            //adapter1.OnRemoveModeExit += () => { toolbar.Menu.Clear(); currentadapter = null; };
+            RenamableAdapter adapter1 = new RenamableAdapter(genres[e].Words.ToArray(), this);
+            RecyclerViewComponents.CreateCustomAdapterDoublelineList(adapter1, this, maincontentlayout, (words) => { ApplyChangetoWordList(words, e); });
             //CurrentWordlist = genres[e.Position].Words.ToArray();
             Genreid = e;
         }
@@ -423,6 +424,23 @@ namespace AndroidApp
         public void EditGenre(int genreid, GenreStruct editedgenre)
         {
             genres[genreid] = editedgenre;
+        }
+        public void RegisiterWord(EditText title_field, EditText desc_field)
+        {
+
+            DoublelineListStruct newword = new DoublelineListStruct();
+            newword.Title = title_field.Text;
+            newword.Description = desc_field.Text;
+
+            //Array.Resize(ref CurrentWordlist, CurrentWordlist.Length + 1);
+            //CurrentWordlist[CurrentWordlist.Length - 1] = newword;
+            GenreStruct newgenre = Genrelist[Genreid];
+            newgenre.Words.Add(newword);
+            WordManager.WriteWordlist(WordManager.GetInternalSavePath(Path.Combine(Genrelist[Genreid].GenreName + GenreFragment.TAG, MainActivity.SAVEDATANAME)), newgenre.Words.ToArray());
+            EditGenre(Genreid, newgenre);
+
+            RecyclerViewComponents.CreateDoublelineList(newgenre.Words.ToArray(), this, maincontentlayout,
+                (words) => { ApplyChangetoWordList(words, Genreid); }, RecyclerView_OnClick);
         }
     }
 }

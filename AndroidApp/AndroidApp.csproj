@@ -76,6 +76,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Assets\BackButtonManager.cs" />
+    <Compile Include="Assets\DebugCMD.cs" />
     <Compile Include="Assets\DevOption.cs" />
     <Compile Include="Assets\DialogComponents.cs" />
     <Compile Include="Assets\EraConverter.cs" />
@@ -87,11 +88,12 @@
     <Compile Include="Assets\RecyclerViewComponents.cs" />
     <Compile Include="Assets\RecyclerViewItemSwiper.cs" />
     <Compile Include="Assets\RemovalAdapter.cs" />
+    <Compile Include="Assets\RenamableAdapter.cs" />
     <Compile Include="Assets\ScoreAnalyticsManager.cs" />
     <Compile Include="Assets\SettingsFragment.cs" />
     <Compile Include="Assets\SettingsSaver.cs" />
     <Compile Include="Assets\TestManager.cs" />
-    <Compile Include="Assets\WordEnterFragment.cs" />
+    <Compile Include="Assets\DoubleTextBoxFragment.cs" />
     <Compile Include="Assets\WordManager.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
