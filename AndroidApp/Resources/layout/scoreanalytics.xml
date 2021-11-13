@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,6 +16,28 @@
         android:textColor="@android:color/black"
         android:textSize="30sp"
         android:autoSizeTextType="uniform" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <Button
+            android:text="前の10件"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/scoreanalytics_previousbutton"
+            tools:ignore="MissingDimension" />
+        <Button
+            android:text="後の10件"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/scoreanalytics_nextbutton"
+            tools:ignore="MissingDimension" />
+    </LinearLayout>
     <Microcharts.Droid.ChartView
         android:layout_width="match_parent"
         android:layout_height="300dp"

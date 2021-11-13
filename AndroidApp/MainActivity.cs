@@ -276,7 +276,6 @@ namespace AndroidApp
                         RunOnUiThread(() => new TestManager(this, genres[Genreid].Words.ToArray(), v.FindViewById<EditText>(Resource.Id.test_answer),
                             v.FindViewById<TextView>(Resource.Id.test_question),
                             v.FindViewById<Button>(Resource.Id.test_checkanewer),
-                            v.FindViewById<Spinner>(Resource.Id.test_spinner),
                             v.FindViewById<ImageView>(Resource.Id.test_marubatsu),
                             WordManager.GetInternalSavePath(Path.Combine(genres[Genreid].GenreName + GenreFragment.TAG, MainActivity.SCOREDATANAME)), false, genres[Genreid].GenreName, Genreid));
                     }
@@ -308,6 +307,8 @@ namespace AndroidApp
                         View v = LayoutInflater.Inflate(Resource.Layout.scoreanalytics, maincontentlayout);
                         RunOnUiThread(() => new ScoreAnalyticsManager(this, Resource.Id.scoreanalytics_recyclerView, v.FindViewById<TextView>(Resource.Id.scoreanalytics_title)
                             , v.FindViewById<ChartView>(Resource.Id.scoreanalytics_chartView)
+                            , v.FindViewById<Button>(Resource.Id.scoreanalytics_nextbutton)
+                            , v.FindViewById<Button>(Resource.Id.scoreanalytics_previousbutton)                           
                             , genres[Genreid].Results.ToArray()));
                     }
                 }

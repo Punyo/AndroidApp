@@ -10,11 +10,11 @@ namespace AndroidApp.Assets
     {
         public event EventHandler<Adapter1ClickEventArgs> ItemClick;
         public event EventHandler<Adapter1ClickEventArgs> ItemLongClick;
-        public DoublelineListStruct[] Word;
+        public DoublelineListStruct[] Element;
 
         public SimpleAdapter(DoublelineListStruct[] words)
         {
-            Word = words;
+            Element = words;
         }
 
         public SimpleAdapter(string[] title, string[] description)
@@ -25,7 +25,7 @@ namespace AndroidApp.Assets
                 words[i].Title = title[i];
                 words[i].Description = description[i];
             }
-            Word = words;
+            Element = words;
         }
 
         // Create new views (invoked by the layout manager)
@@ -45,48 +45,44 @@ namespace AndroidApp.Assets
         // Replace the contents of a view (invoked by the layout manager)
         public override void OnBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
         {
-            var item = Word[position].Title;
+            var item = Element[position].Title;
 
             // Replace the contents of the view with that element
             var holder = viewHolder as Adapter1ViewHolder;
-            holder.Title.Text = Word[position].Title;
-            holder.Description.Text = Word[position].Description;
+            holder.Title.Text = Element[position].Title;
+            holder.Description.Text = Element[position].Description;
         }
 
         public void RemoveAt(int index)
         {
             //Word[index] = new DoublelineListStruct();
-            for (int i = index; i < Word.Length; i++)
+            for (int i = index; i < Element.Length; i++)
             {
-                if (Word.Length - 1 != i)
+                if (Element.Length - 1 != i)
                 {
-                    Word[i] = Word[i + 1];
+                    Element[i] = Element[i + 1];
 
                 }
                 else
                 {
-                    Array.Resize(ref Word, Word.Length - 1);
+                    Array.Resize(ref Element, Element.Length - 1);
                 }
             }
             this.NotifyItemRemoved(index);
-            this.NotifyItemRangeChanged(index, Word.Length);
+            this.NotifyItemRangeChanged(index, Element.Length);
         }
         public void Insert(int index, DoublelineListStruct item)
         {
-            for (int i = index; i < Word.Length; i++)
+            Array.Resize(ref Element, Element.Length + 1);
+            for (int i = Element.Length - 2; i > index - 1; i--)
             {
-                if (Word.Length - 1 != i)
-                {
-                    Word[i] = Word[i - 1];
-
-                }
+                Element[i + 1] = Element[i];
             }
-            Array.Resize(ref Word, Word.Length + 1);
-            Word[index] = item;
-            this.NotifyItemRemoved(index);
-            this.NotifyItemRangeChanged(index, Word.Length);
+            Element[index] = item;
+            //this.NotifyItemRemoved(index);
+            this.NotifyItemRangeChanged(index, Element.Length);
         }
-        public override int ItemCount => Word.Length;
+        public override int ItemCount => Element.Length;
 
         void OnClick(Adapter1ClickEventArgs args) => ItemClick?.Invoke(this, args);
         void OnLongClick(Adapter1ClickEventArgs args) => ItemLongClick?.Invoke(this, args);

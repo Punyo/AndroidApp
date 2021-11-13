@@ -60,7 +60,7 @@ namespace AndroidApp.Assets
             DoublelineListStruct newtext = new DoublelineListStruct();
             for (int i = 0; i < act.Genrelist[act.Genreid].Words.Count; i++)
             {
-                if (act.Genrelist[act.Genreid].Words[i].Title == Word[renameingindex].Title)
+                if (act.Genrelist[act.Genreid].Words[i].Title == Element[renameingindex].Title)
                 {
                     if (!string.IsNullOrWhiteSpace(title.Text))
                     {

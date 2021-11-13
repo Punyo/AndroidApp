@@ -15,7 +15,6 @@ namespace AndroidApp.Assets
         private DoublelineListStruct[] questions;
         private TestQuestionStruct[] questionStruct;
         private TestResultStruct[] pastresults;
-        private Spinner spinner;
         private int questioncount;
         public readonly TextView questiontext;
         public readonly Button button;
@@ -37,7 +36,7 @@ namespace AndroidApp.Assets
         public delegate void QuestionInfo(int index, QuestionResult result);
         public event QuestionInfo OnCorrect;
         public event QuestionInfo OnMiss;
-        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, Spinner spin, ImageView image, string scoredatapath, bool faststart, string genrename, int genreid)
+        public TestManager(MainActivity activity, DoublelineListStruct[] words, EditText edit, TextView question, Button answerbutton, ImageView image, string scoredatapath, bool faststart, string genrename, int genreid)
         {
             mainactivity = activity;
             questions = words;
@@ -47,7 +46,6 @@ namespace AndroidApp.Assets
             genre_name = genrename;
             questiontext = question;
             textfield = edit;
-            spinner = spin;
             button = answerbutton;
             id = genreid;
             animation = AnimationUtils.LoadAnimation(activity, Resource.Animation.marubatsuanim);
@@ -57,11 +55,6 @@ namespace AndroidApp.Assets
             results = new QuestionResult[questions.Length];
             ArrayAdapter adap = ArrayAdapter.CreateFromResource(activity, Resource.Array.test_prompt_options, Android.Resource.Layout.SimpleSpinnerItem);
             adap.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spinner.Adapter = adap;
-            if (Preferences.ContainsKey(modepreferencekey))
-            {
-                spinner.SetSelection(Preferences.Get(modepreferencekey, 0));
-            }
             for (int i = 0; i < questions.Length; i++)
             {
                 questionStruct[i].Question = questions[i];
@@ -99,7 +92,6 @@ namespace AndroidApp.Assets
 
         private void ShowDescription()
         {
-            spinner.Visibility = Android.Views.ViewStates.Visible;
             questiontext.Text = $"{questions.Length}問のテストを開始します。" + System.Environment.NewLine +
                 "よろしいですか？";
             button.Text = "開始";
@@ -111,8 +103,6 @@ namespace AndroidApp.Assets
 
         private void InitialBeforeStart(object sender, EventArgs e)
         {
-            spinner.Visibility = Android.Views.ViewStates.Gone;
-            Preferences.Set(modepreferencekey, (int)spinner.SelectedItemId);
             Button_Click(null, null);
             button.Click -= InitialBeforeStart;
             //button.Click += Button_Click;
@@ -120,14 +110,9 @@ namespace AndroidApp.Assets
         private void Button_Click(object sender, EventArgs e)
         {
             questiontext.SetTextColor(Android.Graphics.Color.Black);
-            if (spinner.SelectedItemId == 0)
-            {
-                GiveQuestion(questioncount);
-            }
-            else
-            {
-                GiveQuestionRandom();
-            }
+
+            GiveQuestionRandom();
+
             button.Click -= Button_Click;
             if (questioncount + 1 >= questions.Length)
             {

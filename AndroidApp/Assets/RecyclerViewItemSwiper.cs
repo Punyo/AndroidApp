@@ -87,19 +87,19 @@ namespace AndroidApp.Assets
             int indexbackup = viewHolder.AdapterPosition;
             if (removaladapter == null)
             {
-                DoublelineListStruct backup = viewadapter.Word[viewHolder.AdapterPosition];
+                DoublelineListStruct backup = viewadapter.Element[viewHolder.AdapterPosition];
                 viewadapter.RemoveAt(viewHolder.AdapterPosition);
-                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, "Test", Snackbar.LengthLong);
-                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(viewadapter.Word); }));
+                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, $"{backup.Title}を削除しました", Snackbar.LengthLong);
+                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(viewadapter.Element); }));
                 s.SetAction("削除を取り消す", (v) => { viewadapter.Insert(indexbackup, backup); });
                 s.Show();
             }
             else
             {
-                DoublelineListStruct backup = removaladapter.Word[viewHolder.AdapterPosition];           
+                DoublelineListStruct backup = removaladapter.Element[viewHolder.AdapterPosition];           
                 removaladapter.RemoveAt(viewHolder.AdapterPosition);
-                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, "Test", Snackbar.LengthLong);
-                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(removaladapter.Word); }));
+                Snackbar s = Snackbar.Make(viewHolder.ItemView.RootView, $"{backup.Title}を削除しました", Snackbar.LengthLong);
+                s.AddCallback(new SnackBarCallBack(() => { OnSwipe?.Invoke(removaladapter.Element); }));
                 s.SetAction("削除を取り消す", (v) => { removaladapter.Insert(indexbackup, backup); });
                 s.Show();
             }

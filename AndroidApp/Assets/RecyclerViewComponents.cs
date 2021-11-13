@@ -84,6 +84,7 @@ namespace AndroidApp.Assets
         private static void IntlList(ref Activity activity, int recyclerviewId, ref SimpleAdapter adapter, RecyclerViewItemSwiper.OnSwipedEvent onswipe = null)
         {
             RecyclerView recyclerView = activity.FindViewById<RecyclerView>(recyclerviewId);
+            recyclerView.RemoveAllViews();
             LinearLayoutManager manager = new LinearLayoutManager(activity);
             recyclerView.SetLayoutManager(manager);
             recyclerView.SetAdapter(adapter);

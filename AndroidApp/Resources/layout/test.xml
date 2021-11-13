@@ -14,14 +14,6 @@
         android:id="@+id/test_question"
         android:textAlignment="gravity"
         android:gravity="center" />
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="36.0dp"
-        android:layout_marginBottom="130dp"
-        android:id="@+id/test_spinner"
-        android:layout_alignParentBottom="true"
-        android:spinnerMode="dropdown"
-        android:prompt="@string/test_prompt_title" />
     <TextView
         android:text="意味"
         android:layout_width="match_parent"

@@ -1,8 +1,9 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Android.App;
 using Android.Widget;
 using Microcharts;
+using System.Linq;
 using Microcharts.Droid;
 
 namespace AndroidApp.Assets
@@ -13,37 +14,85 @@ namespace AndroidApp.Assets
         private LineChart linechart;
         private ChartEntry[] entries;
         private TextView title;
+        private Button next;
+        private Button previous;
         private Activity a;
         private int id;
         private const int maxresults = 10;
-        public ScoreAnalyticsManager(Activity activity, int recyclerviewid, TextView titletext, ChartView chart, TestResultStruct[] results)
+        private int currentresultindex;
+        private List<TestResultStruct[]> resultsarray;
+        public ScoreAnalyticsManager(Activity activity, int recyclerviewid, TextView titletext, ChartView chart, Button nextbutton, Button previousbutton, TestResultStruct[] results)
         {
             linechart = new LineChart();
             chartview = chart;
             title = titletext;
             a = activity;
             id = recyclerviewid;
+            next = nextbutton;
+            previous = previousbutton;
+            resultsarray = new List<TestResultStruct[]>();
             if (results == null)
             {
                 title.Text = "仮";
             }
             else
             {
+                previous.Visibility = Android.Views.ViewStates.Invisible;
                 if (results.Length > maxresults)
                 {
-                    TestResultStruct[] newresults = new TestResultStruct[maxresults];
-                    for (int i = results.Length - maxresults; i < results.Length; i++)
+                    List<TestResultStruct> resultspermax = new List<TestResultStruct>();
+                    int indexcount = 0;
+                    for (int a = 0; a < results.Length / maxresults; a++)
                     {
-                        newresults[i-(results.Length - maxresults)] = results[i];
+                        for (int i = 0 + maxresults * a; i < maxresults * (a + 1); i++)
+                        {
+                            resultspermax.Add(results[i]);
+                        }
+                        resultsarray.Add(resultspermax.ToArray());
+                        resultspermax.Clear();
+                        indexcount++;
                     }
+                    for (int i = indexcount * maxresults; i < results.Length; i++)
+                    {
+                        resultspermax.Add(results[i]);
+                    }
+                    resultsarray.Add(resultspermax.ToArray());
+                    previous.Click += Previous_Click;
+                    next.Click += Next_Click;
                 }
                 else
                 {
-                    ShowResults(results);
-                }              
+                    resultsarray.Add(results);
+                    next.Visibility = Android.Views.ViewStates.Gone;
+                    previous.Visibility = Android.Views.ViewStates.Gone;
+                }
+                ShowResults(resultsarray[0], true);
             }
         }
-        private void ShowResults(TestResultStruct[] testresults)
+
+        private void Next_Click(object sender, EventArgs e)
+        {
+            currentresultindex++;
+            ShowResults(resultsarray[currentresultindex], false);
+            if (resultsarray.Count - 1 == currentresultindex)
+            {
+                next.Visibility = Android.Views.ViewStates.Invisible;
+            }
+            previous.Visibility = Android.Views.ViewStates.Visible;
+        }
+
+        private void Previous_Click(object sender, EventArgs e)
+        {
+            currentresultindex--;
+            ShowResults(resultsarray[currentresultindex], false);
+            if (0 == currentresultindex)
+            {
+                previous.Visibility = Android.Views.ViewStates.Invisible;
+            }
+            next.Visibility = Android.Views.ViewStates.Visible;
+        }
+
+        private void ShowResults(TestResultStruct[] testresults, bool updateaccuratelylist)
         {
             linechart.MaxValue = 100;
             entries = Array.Empty<ChartEntry>();
@@ -97,9 +146,12 @@ namespace AndroidApp.Assets
                 recycler[recycler.Length - 1].Accurate = accurate_double;
             }
             Array.Sort(recycler);
-            RecyclerViewComponents.CreateDoublelineList(GetDoublelineListStruct(recycler), a, id);
+            if (updateaccuratelylist)
+            {
+                RecyclerViewComponents.CreateDoublelineList(GetDoublelineListStruct(recycler), a, id);
+            }
             linechart.Entries = entries;
-            chartview.Chart = linechart;
+            chartview.Chart = linechart;  
             title.Text = testresults[0].Genrename;
         }
         private static double GetAccurate(TestQuestionStruct[] questions)

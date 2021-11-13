@@ -35,7 +35,7 @@ namespace AndroidApp.Assets
 
         public RemovalAdapter1(DoublelineListStruct[] words) : base(words)
         {
-            Word = words;
+            Element = words;
             selectingelements = new List<int>();
             selectingradios = new List<RadioButton>();
             //holders = new List<Removal1AdapterViewHolder>();
@@ -49,7 +49,7 @@ namespace AndroidApp.Assets
                 words[i].Title = title[i];
                 words[i].Description = description[i];
             }
-            Word = words;
+            Element = words;
             selectingelements = new List<int>();
             //holders = new List<Removal1AdapterViewHolder>();
         }
@@ -71,12 +71,12 @@ namespace AndroidApp.Assets
         // Replace the contents of a view (invoked by the layout manager)
         public override void OnBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
         {
-            var item = Word[position].Title;
+            var item = Element[position].Title;
 
             // Replace the contents of the view with that element
             var holder = viewHolder as Removal1AdapterViewHolder;
-            holder.Title.Text = Word[position].Title;
-            holder.Description.Text = Word[position].Description;
+            holder.Title.Text = Element[position].Title;
+            holder.Description.Text = Element[position].Description;
             if (!selectingelements.Contains(position))
             {
                 holder.Radio.Visibility = ViewStates.Gone;
@@ -89,7 +89,7 @@ namespace AndroidApp.Assets
             //holders.Add(holder);
         }
 
-        public override int ItemCount => Word.Length;
+        public override int ItemCount => Element.Length;
 
         void OnClick(RemovalAdapterClickEventArgs args)
         {
@@ -158,7 +158,7 @@ namespace AndroidApp.Assets
                         item.Visibility = ViewStates.Gone;
                     }
                     selectingelements.Clear();
-                    OnRemoveExcuted?.Invoke(Word);
+                    OnRemoveExcuted?.Invoke(Element);
                 }, (a, v) => { }, main.Resources.GetString(Resource.String.dialog_delele), main.Resources.GetString(Resource.String.dialog_cancel));
         }
     }
